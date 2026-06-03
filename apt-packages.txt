@@ -1,0 +1,9 @@
+libcairo2
+libcairo2-dev
+libpango-1.0-0
+libpangocairo-1.0-0
+libgdk-pixbuf2.0-0
+libgobject-introspection-1.0-0
+shared-mime-info
+libffi-dev
+gir1.2-pango-1.0

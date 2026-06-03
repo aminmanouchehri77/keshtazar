@@ -1,0 +1,244 @@
+{% extends '_base.html' %}
+{% load custom_filters %}
+{% block title %}
+    جزئیات سفارش
+{% endblock %}
+{% block content %}
+    <!-- Start Page Title Area -->
+    <div class="page-title-area">
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="container">
+
+                    <div class="page-title-content">
+                        <h2>جزئیات سفارش</h2>
+                        <ul>
+                            <li><a href="{% url 'index' %}">خانه</a></li>
+                            <li>جزئیات سفارش</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Page Title Area -->
+    <div class="container my-5 farm-order-detail">
+        <!-- هدر سفارش -->
+        <div class="order-header card shadow-lg border-success mb-4">
+            <!-- هدر سفارش (اضافه‌شده: ستون نوع ارسال) -->
+            <div class="order-header card shadow-lg border-success mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-tractor me-2"></i>
+                        جزئیات سفارش
+                        <span class="badge bg-light text-dark float-left">
+                        شماره سفارش: #{{ order.id }}
+                    </span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row gy-3">
+                        <div class="col-md-3">
+                            <p class="mb-1">
+                                <i class="fas fa-calendar-check me-2"></i>
+                                تاریخ سفارش:
+                                <strong>{{ order.datetime_created|date:"Y/m/d - H:i" }}</strong>
+                            </p>
+                            <p class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>
+                                وضعیت:
+                                <span class="badge
+                                {% if order.status == 'p' %}bg-success
+                                {% elif order.status == 'c' %}bg-danger
+                                {% else %}bg-warning{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-3 border-start">
+                            <h6 class="text-secondary"><i class="fas fa-user me-2"></i>مشتری</h6>
+                            <p class="mb-1">{{ order.first_name }} {{ order.last_name }}</p>
+                            <p class="mb-0">{{ order.mobile }}</p>
+                        </div>
+
+                        <div class="col-md-3 border-start">
+                            <h6 class="text-secondary"><i class="fas fa-truck me-2"></i>نحوه ارسال</h6>
+                            <p class="mb-0">
+                                <strong>{{ order.get_shipping_type_display }}</strong>
+                            </p>
+                        </div>
+
+                        <div class="col-md-3 border-start">
+                            <h6 class="text-secondary"><i class="fas fa-map-marker-alt me-2"></i>آدرس تحویل</h6>
+                            <p class="mb-1">استان {{ order.province }} - شهر {{ order.city }}</p>
+                            <p class="mb-0">کدپستی: {{ order.postal_code }}</p>
+                            <small class="text-muted">{{ order.address }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- لیست محصولات -->
+            <div class="order-products card shadow-lg mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shopping-basket me-2"></i>
+                        محصولات سفارش
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% for item in order.items.all %}
+                        {% widthratio item.quantity 1 item.unit_price as line_total %}
+                        <div class="product-item d-flex align-items-center py-3 px-4 border-bottom">
+                            <!-- تصویر محصول -->
+                            <div class="me-4">
+                                <img src="{{ item.product.image.url }}"
+                                     alt="{{ item.product.title }}"
+                                     class="product-img rounded border">
+                            </div>
+                            <!-- عنوان و جزئیات -->
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ item.product.title }}</h6>
+                                {% if item.product.name %}
+                                    <p class="text-secondary mb-1 small">نام محصول: {{ item.product.name }}</p>
+                                {% endif %}
+                                <p class="text-secondary mb-0 small">دسته‌بندی: {{ item.product.category }}</p>
+                            </div>
+                            <!-- تعداد -->
+                            <div class="me-5 text-center">
+                                <span class="d-block text-secondary small">تعداد</span>
+                                <strong>{{ item.quantity }}</strong>
+                            </div>
+                            <!-- قیمت واحد (با کلاس اختصاصی برای جابجایی) -->
+                            <div class="me-5 text-end price-unit">
+                                <span class="d-block text-secondary small">قیمت واحد</span>
+                                <strong>{{ item.unit_price|floatformat:"0"|comma_separator }} تومان</strong>
+                            </div>
+                            <!-- قیمت کل (با کلاس اختصاصی برای جابجایی) -->
+                            <div class="text-end price-total">
+                                <span class="d-block text-secondary small">قیمت کل</span>
+                                <strong class="text-success">{{ line_total|floatformat:"0"|comma_separator }} تومان
+                                </strong>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <!-- جمع کل و اطلاعات پرداخت -->
+            <div class="order-summary row">
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-lg border-info">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-money-bill-wave me-2"></i>اطلاعات پرداخت</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-2">
+                                روش پرداخت: {{ payment_method }}
+                            </p>
+                            {% if order.zarinpal_ref_id %}
+                                <p class="mb-0">
+                                    کد پیگیری: {{ order.zarinpal_ref_id }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card shadow-lg border-primary">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-calculator me-2"></i>جمع کل</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>مجموع اقلام:</span>
+                                <span>{{ order.total_price|floatformat:"0"|comma_separator }} تومان</span>
+                            </div>
+                            <div class="d-flex justify-content-between border-top pt-2">
+                                <strong>مبلغ قابل پرداخت:</strong>
+                                <strong>{{ order.total_price|floatformat:"0"|comma_separator }} تومان</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- یادداشت سفارش -->
+            {% if order.note %}
+                <div class="order-notes card shadow-lg mt-4 border-warning">
+                    <div class="card-header bg-warning">
+                        <h5 class="mb-0"><i class="fas fa-sticky-note me-2"></i>یادداشت سفارش</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">{{ order.note }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <style>
+            .farm-order-detail {
+                font-family: 'Sahel', sans-serif;
+            }
+
+            .product-item img {
+                max-width: 80px;
+                height: auto;
+                border: 2px solid #4CAF50;
+                padding: 3px;
+            }
+
+            .border-success {
+                border-color: #4CAF50 !important;
+            }
+
+            .border-primary {
+                border-color: #2196F3 !important;
+            }
+
+            .border-info {
+                border-color: #00BCD4 !important;
+            }
+
+            .border-warning {
+                border-color: #FFC107 !important;
+            }
+
+            .rounded-circle {
+                border-radius: 50% !important;
+            }
+
+            .farm-order-detail .product-item {
+                transition: background-color .2s;
+            }
+
+            .farm-order-detail .product-item:hover {
+                background-color: #f9f9f9;
+            }
+
+            .farm-order-detail .product-img {
+                width: 70px;
+                height: 70px;
+                object-fit: cover;
+            }
+
+            .farm-order-detail .price-unit,
+            .farm-order-detail .price-total {
+                margin-left: 10px;
+            }
+
+            /* افکت هاور */
+            .farm-order-detail .product-item {
+                transition: background-color .2s;
+            }
+
+            .farm-order-detail .product-item:hover {
+                background-color: #f9f9f9;
+            }
+
+        </style>
+{% endblock %}

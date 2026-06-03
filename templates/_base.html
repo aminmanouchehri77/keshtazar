@@ -1,0 +1,812 @@
+{% load i18n %}
+{% load static %}
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords"
+          content="HTML5,CSS3,HTML,Template,multi-page,Trifles - Agriculture and Organic Food HTML Template">
+    <meta name="description" content="Trifles - Agriculture and Organic Food HTML Template">
+    <meta name="author" content="Barat Hadian">
+    {% block extra_meta %}{% endblock %}
+    {% block extra_css %}{% endblock %}
+
+    <link rel="stylesheet" href="{% static "css/bootstrap.rtl.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/animate.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/fontawesome.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/flaticon.css" %}">
+    <link rel="stylesheet" href="{% static "css/magnific-popup.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/owl.carousel.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/imagelightbox.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/nice-select.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/meanmenu.css" %}">
+    <link rel="stylesheet" href="{% static "css/odometer.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" href="{% static "css/responsive.css" %}">
+    <link rel="stylesheet" href="{% static "css/rtl.css" %}">
+
+    <title>{% block title %} {% endblock %}</title>
+
+    <link rel="icon" type="image/png" href="{% static "img/favicon.png" %}">
+    <style>
+        /* ============================
+           استایل‌های عمومی
+           ============================ */
+        .nav-link form button.btn-link {
+            color: inherit;
+            text-decoration: none;
+            padding: 0;
+            border: none;
+            background: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover form button.btn-link,
+        .nav-link:hover form button.btn-link i {
+            color: #ff0000 !important;
+        }
+
+        .nav-link form button.btn-link:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        /* ============================
+           استایل‌های هدر و موبایل
+           ============================ */
+        .trifles-responsive-menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .mobile-icons {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .mobile-icons .option-item,
+        .mobile-icons .cart-btn,
+        .mobile-icons .mobile-menu-toggle {
+            font-size: 20px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .mobile-menu-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-menu-toggle span {
+            width: 22px;
+            height: 2px;
+            margin: 2px 0;
+            background-color: #333;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        .mobile-icons .cart-btn {
+            position: relative;
+        }
+
+        .mobile-icons .cart-btn span {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background-color: #23a61e;
+            color: #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            text-align: center;
+            line-height: 16px;
+        }
+
+        /* Sticky Navbar */
+        .navbar-area.is-sticky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1030;
+            box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.09);
+            background-color: #ffffff !important;
+            animation: fadeInDown 0.5s;
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .trifles-responsive-nav, .trifles-responsive-menu, .trifles-nav, .navbar-area .container {
+            background-color: transparent !important;
+        }
+
+        /* ============================
+           مدیا کوئری‌های هدر
+           ============================ */
+        @media (max-width: 991px) {
+            .trifles-responsive-nav {
+                display: block;
+            }
+
+            .trifles-nav {
+                display: none;
+            }
+
+            .mobile-nav-menu {
+                display: none;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: #fff;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                z-index: 998;
+                height: auto;
+                max-height: calc(100vh - 70px);
+                overflow-y: auto;
+            }
+
+            .mobile-nav-menu.active {
+                display: block;
+                animation: fadeIn 0.3s ease;
+            }
+
+            .mobile-nav-menu ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .mobile-nav-menu ul li {
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .mobile-nav-menu ul li a {
+                color: #333;
+                display: block;
+                padding: 12px 0;
+                font-size: 15px;
+            }
+
+            .mobile-nav-menu ul li a:hover {
+                color: #23a61e;
+                padding-right: 5px;
+            }
+
+            .search-popup {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #fff;
+                padding: 15px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                display: none;
+                z-index: 999;
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .search-popup.active {
+                display: block;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-form {
+                display: flex;
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 0 4px 4px 0;
+            }
+
+            .search-button {
+                padding: 0 15px;
+                background: #23a61e;
+                color: #fff;
+                border: none;
+                border-radius: 4px 0 0 4px;
+            }
+        }
+
+        /* ============================
+           تنظیم پدینگ محتوا
+           ============================ */
+        @media (max-width: 1200px) {
+            .navbar-area + main, .navbar-area + div, .navbar-area + section {
+                padding-top: 90px;
+            }
+        }
+
+        @media (max-width: 991px) {
+            .navbar-area + main, .navbar-area + div, .navbar-area + section {
+                padding-top: 85px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .navbar-area + main, .navbar-area + div, .navbar-area + section {
+                padding-top: 80px;
+            }
+        }
+
+        /* ============================
+           اصلاحیه نهایی بنر (حذف متن در موبایل)
+           ============================ */
+
+        @media (max-width: 767px) {
+            /* تنظیم کادر کلی برای نمایش تمیز عکس */
+            .page-title-area {
+                height: 250px !important; /* ارتفاع کمتر و مناسب عکس */
+                background-position: center bottom !important; /* تراکتور پایین بماند */
+                padding: 0 !important;
+                position: relative !important;
+            }
+
+            /* مخفی کردن کامل متن‌ها و عنوان صفحه در موبایل */
+            .page-title-area .page-title-content {
+                display: none !important;
+            }
+
+            /* غیرفعال کردن جدول برای جلوگیری از بهم ریختگی */
+            .page-title-area .d-table,
+            .page-title-area .d-table-cell {
+                display: block !important;
+                height: 100% !important;
+            }
+        }
+
+        /* ============================
+           استایل‌های فوتر
+           ============================ */
+        .footer-area {
+            background-color: #f8f9fa;
+            padding-top: 60px;
+            direction: rtl;
+        }
+
+        .footer-widgets {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+            padding-bottom: 3rem;
+        }
+
+        .single-footer-widget {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .single-footer-widget h3 {
+            position: relative;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            padding-bottom: 10px;
+        }
+
+        .single-footer-widget h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #23a61e;
+        }
+
+        .footer-services-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-services-list li {
+            margin-bottom: 8px;
+        }
+
+        .footer-link, .footer-services-list a {
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .footer-link:hover, .footer-services-list a:hover {
+            color: #23a61e;
+            padding-right: 5px;
+        }
+
+        .contact-info p {
+            margin-bottom: 12px;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .contact-info i {
+            color: #23a61e;
+            margin-left: 8px;
+            font-size: 16px;
+            vertical-align: middle;
+        }
+
+        .contact-info a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .trusts {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .trusts img {
+            max-width: 90px;
+            border-radius: 5px;
+            transition: transform 0.3s;
+            background: #fff;
+            padding: 5px;
+            border: 1px solid #eee;
+        }
+
+        .trusts img:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .copyright-area {
+            background-color: #f1f1f1;
+            border-top: 1px solid #e6e6e6;
+            padding: 15px 0;
+        }
+
+        .copyright-area .container {
+            justify-content: center !important;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .copyright-area p {
+            margin: 0 0 8px 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .copyright-area ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            justify-content: center;
+        }
+
+        .copyright-area ul li {
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .copyright-area ul li:not(:last-child):after {
+            content: "|";
+            position: absolute;
+            left: -12px;
+            color: #ccc;
+        }
+
+        .copyright-area ul li a {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .copyright-area ul li a:hover {
+            color: #23a61e;
+        }
+
+        @media (min-width: 768px) {
+            .copyright-area .container {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .copyright-area p {
+                margin-bottom: 0;
+                margin-left: 20px;
+            }
+        }
+
+        .developer-area {
+            background-color: #545E68;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 13px;
+            border-top: 1px solid #4a535c;
+        }
+
+        .developer-area p {
+            margin: 0;
+            color: #23a61e;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 991px) {
+            .footer-widgets {
+                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .single-footer-widget {
+                width: 100%;
+                padding: 0 15px;
+            }
+
+            .single-footer-widget h3:after {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+            }
+
+            .trusts {
+                justify-content: center;
+                margin-top: 10px;
+            }
+
+            .contact-widget {
+                order: 1;
+            }
+
+            .support-widget {
+                order: 2;
+            }
+
+            .trusts {
+                order: 3;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Start Navbar Area -->
+<div class="navbar-area">
+    <div class="trifles-responsive-nav">
+        <div class="container">
+            <div class="trifles-responsive-menu">
+                <div class="logo">
+                    <a href="{% url 'index' %}">
+                        <img src="{% static "img/logo2.png" %}" alt="logo" style="max-height: 45px;">
+                    </a>
+                </div>
+                <!-- Mobile Icons -->
+                <div class="mobile-icons">
+                    <div class="option-item">
+                        <i class="search-btn fa fa-search"></i>
+                        <i class="close-btn fa fa-times" style="display: none;"></i>
+                        <div class="search-popup">
+                            <div class='search-box'>
+                                <form class="search-form" action="{% url 'searched_product_list' %}">
+                                    <input class="search-input" name="search" placeholder="جستجو کنید..." type="text">
+                                    <button class="search-button" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-btn">
+                        <a href="{% url 'cart_detail' %}">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span>{{ cart.cart_len }}</span>
+                        </a>
+                    </div>
+                    <div class="mobile-menu-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Navigation Menu -->
+            <div class="mobile-nav-menu">
+                <ul>
+                    <li><a href="{% url 'index' %}">خانه</a></li>
+                    <li><a href="{% url 'services' %}">خدمات</a></li>
+                    <li><a href="{% url 'faq' %}">سوالات متداول</a></li>
+                    <li><a href="{% url 'product_list' %}">فروشگاه</a></li>
+                    <li><a href="{% url 'blog_posts_list' %}">بلاگ</a></li>
+                    <li><a href="{% url 'contact_us' %}">تماس با ما</a></li>
+                    {% if user.is_authenticated %}
+                        <li style="background-color: #f9f9f9; padding-right: 10px;">
+                            {% if user.customer %}
+                                <span class="d-block py-2 text-success">خوش آمدید! {{ user.customer.first_name }}</span>
+                            {% else %}
+                                <span class="d-block py-2 text-success">خوش آمدید! {{ user.mobile }}</span>
+                            {% endif %}
+                        </li>
+                        <li><a href="{% url 'order_history' %}"><i class="fa fa-history ml-2"></i> تاریخچه سفارشات</a>
+                        </li>
+                        <li>
+                            <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link nav-link text-danger">
+                                    خروج <i class="fa fa-sign-out-alt"></i>
+                                </button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'accounts:login' %}">ورود <i class="fa fa-sign-in-alt"></i> / ثبت نام <i
+                                class="fa fa-user-plus"></i></a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Nav (Same as before) -->
+    <div class="trifles-nav">
+        <div class="container">
+            <nav class="navbar navbar-expand-md navbar-light">
+                <a class="navbar-brand" href="{% url 'index' %}">
+                    <img src="{% static 'img/logo2.png' %}" alt="logo">
+                </a>
+
+                <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">خانه</a></li>
+                        <li class="nav-item"><a href="{% url 'services' %}" class="nav-link">خدمات</a></li>
+                        <li class="nav-item"><a href="{% url 'faq' %}" class="nav-link">سوالات متداول</a></li>
+                        <li class="nav-item"><a href="{% url 'product_list' %}" class="nav-link">فروشگاه</a></li>
+                        <li class="nav-item"><a href="{% url 'blog_posts_list' %}" class="nav-link">بلاگ</a></li>
+                        <li class="nav-item"><a href="{% url 'contact_us' %}" class="nav-link">تماس با ما</a></li>
+
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a href="" class="nav-link">
+                                    {% if user.customer %}
+                                        خوش آمدید! {{ user.customer.first_name }}
+                                    {% else %}
+                                        خوش آمدید! {{ user.mobile }}
+                                    {% endif %}
+                                    <i class="fa fa-chevron-down"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a href="{% url 'order_history' %}" class="nav-link">
+                                            <i class="fa fa-history ml-2"></i> تاریخچه سفارشات
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <form action="{% url 'accounts:logout' %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-link nav-link">خروج <i
+                                                        class="fa fa-sign-out-alt"></i></button>
+                                            </form>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'accounts:login' %}" class="nav-link">ورود <i
+                                        class="fa fa-sign-in-alt"></i> /ثبت نام <i class="fa fa-user-plus"></i></a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    <div class="others-options">
+                        <div class="option-item"><i class="search-btn fa fa-search"></i>
+                            <i class="close-btn fa fa-times" style="display:none;"></i>
+                            <div class="search-overlay search-popup">
+                                <div class='search-box'>
+                                    <form class="search-form" action="{% url 'searched_product_list' %}">
+                                        <input class="search-input" name="search" placeholder="جستجو" type="text">
+                                        <button class="search-button" type="submit"><i class="fas fa-search"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cart-btn">
+                            <a href="{% url 'cart_detail' %}">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>{{ cart.cart_len }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- End Navbar Area -->
+
+{% block content %}{% endblock %}
+
+<!-- Start Footer Area -->
+<footer class="footer-area">
+    <div class="container">
+        <!-- Wrapper ویجت‌های فوتر -->
+        <div class="footer-widgets">
+
+            <!-- 1) لوگوها و نمادهای اعتماد -->
+            <div class="single-footer-widget trusts">
+                <a href="https://sep.ir/" target="_blank" class="trust-item">
+                    <img src="{% static 'img/logo_sep.jpg' %}" alt="درگاه پرداخت سپ">
+                </a>
+                <a referrerpolicy='origin' target='_blank'
+                   href='https://trustseal.enamad.ir/?id=594102&Code=N2r76S4AsGxTxreYFkBcVs7zCazKjf6r'>
+                    <img referrerpolicy='origin'
+                         src='https://trustseal.enamad.ir/logo.aspx?id=594102&Code=N2r76S4AsGxTxreYFkBcVs7zCazKjf6r'
+                         alt='نماد اعتماد الکترونیکی'>
+                </a>
+            </div>
+
+            <!-- 2) اطلاعات تماس -->
+            <div class="single-footer-widget contact-widget">
+                <h3>اطلاعات تماس</h3>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> خیابان حافظ شرقی نبش فرعی34، اصفهان ، شهرضا</p>
+                    <p><i class="fas fa-phone"></i> <a href="tel:03153544206">031-53544206</a></p>
+                    <p><i class="far fa-envelope"></i> <a href="mailto:azar_pasarghad@yahoo.com">azar_pasarghad@yahoo.com</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 3) لینک‌های پشتیبانی -->
+            <div class="single-footer-widget support-widget">
+                <h3>پشتیبانی ما</h3>
+                <ul class="footer-services-list">
+                    <li><a href="{% url 'product_list' %}">محصولات</a></li>
+                    <li><a href="{% url 'terms_condition' %}">قوانین و مقررات</a></li>
+                    <li><a href="{% url 'faq' %}">سوالات متداول</a></li>
+                    <li><a href="{% url 'contact_us' %}">با ما تماس بگیرید</a></li>
+                    <li><a href="{% url 'accounts:login' %}">حساب کاربری من</a></li>
+                </ul>
+            </div>
+
+        </div> <!-- /.footer-widgets -->
+    </div> <!-- /.container -->
+
+    <!-- Copyright Area -->
+    <div class="copyright-area">
+        <div class="container d-flex">
+            <p>تمامی حقوق متعلق به فروشگاه کشت آذر پاسارگاد می‌باشد</p>
+            <ul class="d-flex list-unstyled mb-0">
+                <li><a href="{% url 'terms_condition' %}">قوانین و مقررات</a></li>
+                <li><a href="{% url 'terms_condition' %}">حریم خصوصی</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Developer Credit Area -->
+    <div class="developer-area">
+        <div class="container">
+            <p>طراحی و کدنویسی توسط تیم سامین وب: 09913928400 </p>
+        </div>
+    </div>
+</footer>
+<!-- End Footer Area -->
+
+<div class="go-top"><i class="fas fa-chevron-up"></i></div>
+
+<!-- جاوااسکریپت‌های قالب -->
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script src="{% static "js/popper.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/owl.carousel.min.js" %}"></script>
+<script src="{% static "js/magnific-popup.min.js" %}"></script>
+<script src="{% static "js/imagelightbox.min.js" %}"></script>
+<script src="{% static "js/meanmenu.js" %}"></script>
+<script src="{% static "js/jquery.nice-select.min.js" %}"></script>
+<script src="{% static "js/odometer.min.js" %}"></script>
+<script src="{% static "js/jquery.appear.js" %}"></script>
+<script src="{% static "js/jquery.ajaxchimp.min.js" %}"></script>
+<script src="{% static "js/form-validator.min.js" %}"></script>
+<script src="{% static "js/contact-form-script.js" %}"></script>
+<script src="{% static "js/main.js" %}"></script>
+
+<!-- جاوااسکریپت‌های واکنش‌گرا -->
+<script>
+    $(document).ready(function () {
+        // Sticky Navbar
+        $(window).on('scroll', function () {
+            if ($(this).scrollTop() > 100) {
+                $('.navbar-area').addClass('is-sticky');
+            } else {
+                $('.navbar-area').removeClass('is-sticky');
+            }
+        });
+
+        // Mobile Menu Toggle
+        $('.mobile-menu-toggle').on('click', function () {
+            $(this).toggleClass('active');
+            $('.mobile-nav-menu').toggleClass('active');
+        });
+
+        // Search Popup Toggle
+        $('.search-btn').on('click', function (e) {
+            e.preventDefault();
+            $(this).closest('.option-item').find('.search-popup').toggleClass('active');
+            $(this).hide();
+            $(this).siblings('.close-btn').show();
+        });
+
+        $('.close-btn').on('click', function (e) {
+            e.preventDefault();
+            $(this).closest('.option-item').find('.search-popup').removeClass('active');
+            $(this).hide();
+            $(this).siblings('.search-btn').show();
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    !function () {
+        var i = "1dUQ6w", a = window, d = document;
+
+        function g() {
+            var g = d.createElement("script"), s = "https://www.goftino.com/widget/" + i,
+                l = localStorage.getItem("goftino_" + i);
+            g.async = !0, g.src = l ? s + "?o=" + l : s;
+            d.getElementsByTagName("head")[0].appendChild(g);
+        }
+
+        "complete" === d.readyState ? g() : a.attachEvent ? a.attachEvent("onload", g) : a.addEventListener("load", g, !1);
+    }();
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

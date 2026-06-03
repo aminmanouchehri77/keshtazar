@@ -1,0 +1,113 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}
+سوالات متداول
+{% endblock %}
+{% block content %}
+
+<!-- Start Page Title Area -->
+<div class="page-title-area item-bg3">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>سوالات متداول</h2>
+                    <ul>
+                        <li><a href="index.html">خانه</a></li>
+                        <li>سوالات متداول</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Title Area -->
+
+<!-- Start FAQ Area -->
+<section class="faq-area ptb-100">
+    <div class="container">
+        <div class="section-title">
+            <h3>سوالات متداول</h3>
+            <p>در اینجا ما پرتکرار ترین سوالات را برای شما قرار داده ایم.
+                </p>
+        </div>
+
+        <div class="faq-accordion-content">
+            <ul class="accordion">
+                {% for faq in faqs %}
+                    <li class="accordion-item">
+                    <a class="accordion-title active" href="javascript:void(0)">
+                        <i class="fas fa-plus"></i>
+                        {{ faq.question }}
+                    </a>
+
+                    <p class="accordion-content show">{{ faq.answer }}</p>
+                </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
+
+    </div>
+</section>
+<!-- End FAQ Area -->
+
+<!-- Start Partner Section -->
+<div class="partner-section">
+    <div class="container">
+        <div class="partner-list">
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/1.png' %}" alt="image">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/2.png' %}" alt="image">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/3.png' %}" alt="image">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/4.png' %}" alt="image">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/5.png' %}" alt="image">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/6.png' %}" alt="image">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/7.png' %}" alt="image">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/8.png' %}" alt="image">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Partner Section -->
+{% endblock %}
+

@@ -1,0 +1,185 @@
+{% extends '_base.html' %}
+{% load static crispy_forms_filters %}
+
+{% block title %}پروفایل مشتری{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <!-- Persian Datepicker CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css"/>
+{% endblock %}
+
+{% block content %}
+    <div class="page-title-area">
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="container">
+                    <div class="page-title-content">
+                        <h2>پروفایل</h2>
+                        <ul>
+                            <li><a href="{% url 'index' %}">خانه</a></li>
+                            <li>پروفایل</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                {# پیام‌های سیستم #}
+                {% if messages %}
+                    <div class="mb-4">
+                        {% for message in messages %}
+                            <div class="alert
+              {% if message.tags == 'error' %}alert-danger
+              {% elif message.tags == 'success' %}alert-success
+              {% else %}alert-info{% endif %}
+              alert-dismissible fade show" role="alert">
+                                {% if message.tags == 'error' %}
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                {% elif message.tags == 'success' %}
+                                    <i class="fas fa-check-circle me-2"></i>
+                                {% else %}
+                                    <i class="fas fa-info-circle me-2"></i>
+                                {% endif %}
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="card shadow-lg p-4" style="border:2px solid #28a745; border-radius:10px;">
+                    <h3 class="text-center mb-4" style="color:#28a745;">اطلاعات مشتری</h3>
+                    <form method="post" id="customer-form">
+                        {% csrf_token %}
+
+                        <!-- مشخصات مشتری -->
+                        <h5 style="color:#155724;">مشخصات مشتری</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-user"></i>
+                                    {{ customer_form.first_name.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ customer_form.first_name }}
+
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="far fa-user"></i>
+                                    {{ customer_form.last_name.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ customer_form.last_name }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-envelope"></i>
+                                    {{ customer_form.email.label }}
+                                </label>
+                                {{ customer_form.email }}
+
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-id-card"></i>
+                                    {{ customer_form.national_code.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ customer_form.national_code }}
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="far fa-calendar-alt"></i>
+                                    {{ customer_form.birth_date.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ customer_form.birth_date }}
+                                <small class="form-text text-warning">
+                                    فرمت: YYYY/MM/DD — مثال: 1404/01/01
+                                </small>
+
+                            </div>
+                        </div>
+
+                        <!-- اطلاعات آدرس -->
+                        <h5 style="color:#155724;">آدرس</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-map-marker-alt"></i>
+                                    {{ address_form.province.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ address_form.province }}
+
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-city"></i>
+                                    {{ address_form.city.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ address_form.city }}
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label class="form-label"><i class="fas fa-road"></i>
+                                    {{ address_form.street.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ address_form.street }}
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-credit-card"></i>
+                                    {{ address_form.postal_code.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ address_form.postal_code }}
+
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success px-5"
+                                    style="border-radius:20px; background-image:linear-gradient(to right,#4caf50,#81c784);">
+                                <i class="fas fa-save"></i> به‌روزرسانی اطلاعات
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+    <script>
+        $(function () {
+            $('.jalali-date-input').pDatepicker({
+                format: 'YYYY/MM/DD',
+                calendarType: 'persian',
+                autoClose: true,
+                initialValueType: 'gregorian',
+                toolbox: {calendarSwitch: {enabled: false}},
+                navigator: {scroll: {enabled: true}, text: {btnNextText: '›', btnPrevText: '‹'}}
+            });
+        });
+        // تبدیل "/" به "-" قبل از ارسال
+        document.getElementById('customer-form')
+            .addEventListener('submit', function () {
+                let f = this.querySelector('.jalali-date-input');
+                if (f && f.value) f.value = f.value.replace(/\//g, '-');
+            });
+    </script>
+{% endblock %}

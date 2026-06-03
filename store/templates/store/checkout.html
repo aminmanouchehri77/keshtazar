@@ -1,0 +1,251 @@
+{% extends '_base.html' %}{% load math_filters %}{% load custom_filters %}
+{% block title %}
+    ثبت سفارش
+{% endblock %}
+
+{% block content %}
+    <!-- Start Page Title Area -->
+    <div class="page-title-area">
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="container">
+                    <div class="page-title-content">
+                        <h2>پرداخت</h2>
+                        <ul>
+                            <li><a href="{% url 'index' %}">خانه</a></li>
+                            <li>پرداخت</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Title Area -->
+
+    <!-- Start Checkout Area -->
+    <section class="checkout-area ptb-100">
+        <div class="container">
+            <!-- نمایش پیام‌های سیستم -->
+            {% if messages %}
+                <div class="messages mb-4">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% else %}alert-info{% endif %} alert-dismissible fade show"
+                             role="alert">
+                            {% if message.tags == 'error' %}<i class="fas fa-exclamation-circle me-2"></i>
+                            {% elif message.tags == 'success' %}<i class="fas fa-check-circle me-2"></i>
+                            {% else %}<i class="fas fa-info-circle me-2"></i>{% endif %}
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!-- پایان نمایش پیام‌ها -->
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="billing-details">
+                            <h3 class="title">جزئیات صورتحساب</h3>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="form-group">
+                                        <label>نام:
+                                            {{ request.user.customer.first_name }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="form-group">
+                                        <label>نام خانوادگی:
+                                            {{ request.user.customer.last_name }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="form-group">
+                                        <label>آدرس ایمیل:
+                                            {% if request.user.email %}
+                                                {{ request.user.email }}
+                                            {% else %}
+                                                <span class="text-warning">ایمیلی ثبت نشده است.</span>
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="form-group">
+                                        <label>تلفن:
+                                            {{ request.user.mobile }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="form-group">
+                                        <label> استان:
+                                            {{ request.user.customer.address.province }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-6">
+                                    <div class="form-group">
+                                        <label>شهر / منطقه:
+                                            {{ request.user.customer.address.city }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="form-group">
+                                        <label>کد پستی:
+                                            {{ request.user.customer.address.postal_code }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <label>نشانی:
+                                            {{ request.user.customer.address }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 mb-3">
+                                    <a href="{% url 'edit_profile' request.user.customer.id %}"
+                                       class="btn btn-outline-success btn-sm">
+                                        <i class="fas fa-user-edit me-1"></i> ویرایش پروفایل
+                                    </a>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 mb-3">
+                                    <a href="{% url 'accounts:login' %}" class="btn btn-outline-warning btn-sm">
+                                        <i class="fa fa-sign-in-alt me-1"></i> انتقال به حساب کاربری دیگر
+                                    </a>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-group">
+<textarea name="notes" id="notes" cols="30" rows="5"
+          placeholder="یادداشت خود را بنویسید.(درصورتی که قصد ارسال سفارش به آدرس دیگری را دارید در اینجا آدرس و کدپستی را وارد کنید)"
+          class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="order-details">
+                            <h3 class="title">سفارش شما</h3>
+                            <div class="order-table table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">نام محصول</th>
+                                        <th scope="col">مجموع</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in cart %}
+                                        <tr>
+                                            <td class="product-name">
+                                                <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
+                                                <span class="text-success"> ({{ item.quantity }})</span>
+                                            </td>
+                                            <td class="product-total">
+                                                <span class="subtotal-amount">{{ item.total_price|comma_separator }} تومان</span>
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="2" class="text-center py-3">سبد خرید شما خالی است</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td class="product-name">هزینه پست</td>
+                                        <td class="product-total">
+<span class="subtotal-amount">
+{% if request.session.shipping_cost %}
+    {{ request.session.shipping_cost|comma_separator }} تومان
+{% else %}
+    0 تومان
+{% endif %}
+</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="product-name">تخفیف</td>
+                                        <td class="product-total">
+<span class="subtotal-amount text-danger">
+{% if request.session.discount_amount %}
+    -{{ request.session.discount_amount|comma_separator }} تومان
+{% else %}
+    0 تومان
+{% endif %}
+</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="total-price">
+                                        <td class="product-name fw-bold">مجموع کل</td>
+                                        <td class="product-total">
+<span class="subtotal-amount fw-bold">
+{{ cart.get_total_price|add:request.session.shipping_cost|default:0|subtract:request.session.discount_amount|default:0|comma_separator }} تومان
+</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="payment-box">
+                                <!-- افزودن چک باکس قوانین و مقررات -->
+                                <div class="terms-condition mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="termsCheck">
+                                        <input type="hidden"
+                                               name="shipping_type"
+                                               value="{{ request.session.shipping_type|default:'' }}">
+                                        <label class="form-check-label" for="termsCheck">
+                                            من <a href="{% url 'terms_condition' %}" target="_blank">قوانین و
+                                            مقررات</a> را مطالعه کرده و قبول دارم.
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {% if cart.cart_len != 0 %}
+                                    <button type="submit" class="default-btn order-btn w-100" id="submitOrderBtn"
+                                            style="display: none;">
+                                        <i class="fa fa-shopping-cart me-1"></i> ثبت نهایی سفارش
+                                    </button>
+                                {% else %}
+                                    <a href="{% url 'cart_detail' %}" class="default-btn order-btn w-100">
+                                        <i class="fa fa-shopping-cart me-1"></i> بازگشت به سبد خرید
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- اضافه کردن اسکریپت برای نمایش دکمه ثبت سفارش پس از تیک زدن چک باکس -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const termsCheck = document.getElementById('termsCheck');
+            const submitOrderBtn = document.getElementById('submitOrderBtn');
+
+            if (termsCheck && submitOrderBtn) {
+                termsCheck.addEventListener('change', function () {
+                    if (this.checked) {
+                        submitOrderBtn.style.display = 'block';
+                    } else {
+                        submitOrderBtn.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

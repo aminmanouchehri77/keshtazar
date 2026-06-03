@@ -1,0 +1,274 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}قوانین و مقررات | کشت آذر پاسارگاد{% endblock %}
+
+{% block content %}
+    <!-- Start Page Header -->
+    <!-- Start Page Title Area -->
+    <div class="page-title-area">
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="container">
+                    <div class="page-title-content">
+                        <h2>قوانین و مقررات</h2>
+                        <ul>
+                            <li><a href="{% url 'index' %}">خانه</a></li>
+                            <li>قوانین و مقررات</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Header -->
+
+    <!-- Start Terms & Conditions Section -->
+    <section class="terms-conditions-section pt-100 pb-100">
+        <div class="container">
+            <!-- Introduction Card -->
+            <div class="row mb-5">
+                <div class="col-lg-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-shield-alt fa-2x text-success me-3"></i>
+                                <h2 class="mb-0">به بخش قوانین و مقررات کشت آذر پاسارگاد خوش آمدید</h2>
+                            </div>
+                            <p class="lead">ما متعهد به ارائه محصولات کشاورزی با کیفیت و استاندارد هستیم. لطفاً قوانین
+                                زیر را با دقت مطالعه فرمایید.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-terms-conditions">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-gavel fa-lg text-primary me-2"></i>
+                    <h3>مقررات عمومی</h3>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <p>با استفاده از خدمات فروشگاه اینترنتی کشت آذر پاسارگاد، شما موافقت می‌کنید که این شرایط و
+                            ضوابط را
+                            کاملاً پذیرفته‌اید. کلیه فعالیت‌های این سایت طبق قوانین جمهوری اسلامی ایران و استانداردهای
+                            سازمان
+                            حفظ نباتات انجام می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-terms-conditions">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-flask fa-lg text-success me-2"></i>
+                    <h3>مقررات مربوط به محصولات</h3>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i>کلیه سموم و کودهای عرضه شده دارای
+                                مجوزهای لازم از سازمان‌های مربوطه شامل وزارت جهاد کشاورزی و سازمان غذا و دارو می‌باشند.
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-exclamation-triangle text-warning me-2"></i>استفاده نادرست از محصولات
+                                شیمیایی خارج از دستورالعمل ارائه شده، مسئولیت قانونی به همراه خواهد داشت.
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-id-card text-info me-2"></i>فروش سموم خاص تنها به دارندگان پروانه رسمی
+                                کشاورزی و با ارائه مدارک معتبر انجام می‌شود.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="single-terms-conditions">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-shopping-cart fa-lg text-danger me-2"></i>
+                        <h3>مقررات سفارش و پرداخت</h3>
+                    </div>
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent"><i
+                                        class="far fa-clock text-primary me-2"></i>پرداخت
+                                    هزینه سفارشات باید حداکثر تا 24 ساعت پس از ثبت سفارش انجام پذیرد.
+                                </li>
+                                <li class="list-group-item bg-transparent"><i
+                                        class="fas fa-money-bill-wave text-success me-2"></i>قیمت محصولات به تومان
+                                    بوده
+                                    و شامل مالیات بر ارزش افزوده می‌باشد.
+                                </li>
+                                <li class="list-group-item bg-transparent"><i
+                                        class="fas fa-sync-alt text-warning me-2"></i>در
+                                    صورت تغییر قیمت توسط تولیدکننده، حق تعدیل قیمت با توجه به نرخ اعلامی محفوظ است.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-terms-conditions">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-truck fa-lg text-info me-2"></i>
+                        <h3>مقررات تحویل کالا</h3>
+                    </div>
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent"><i
+                                        class="fas fa-user-check text-danger me-2"></i>تحویل سموم خطرناک فقط به صورت
+                                    حضوری و
+                                    با ارائه مدارک شناسایی معتبر انجام می‌شود.
+                                </li>
+                                <li class="list-group-item bg-transparent"><i
+                                        class="fas fa-box-open text-warning me-2"></i>مسئولیت
+                                    هرگونه آسیب ناشی از حمل ونقل غیراصولی بر عهده خریدار می‌باشد.
+                                </li>
+                                <li class="list-group-item bg-transparent"><i
+                                        class="far fa-calendar-times text-secondary me-2"></i>در صورت عدم دریافت کالا طی
+                                    72
+                                    ساعت پس از اعلام آمادگی، سفارش لغو محسوب می‌شود.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-terms-conditions">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-undo-alt fa-lg text-success me-2"></i>
+                        <h3>ضمانت بازگشت کالا</h3>
+                    </div>
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>توجه:</strong> به دلیل ماهیت محصولات شیمیایی، شرایط خاصی برای بازگشت کالا وجود
+                                دارد.
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent"><i
+                                        class="fas fa-microscope text-primary me-2"></i>بازگرداندن محصولات شیمیایی به
+                                    دلیل
+                                    خطرات احتمالی، تنها در صورت وجود نقص فنی و با تأیید کارشناسان
+                                    فنی شرکت امکان‌پذیر است.
+                                </li>
+                                <li class="list-group-item bg-transparent"><i
+                                        class="fas fa-box text-secondary me-2"></i>کالاهای
+                                    مرجوعی باید در بسته‌بندی اصلی و بدون کوچکترین آسیبی باشند.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-terms-conditions">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-balance-scale fa-lg text-danger me-2"></i>
+                        <h3>مسئولیت‌های حقوقی</h3>
+                    </div>
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent"><i
+                                        class="fas fa-exclamation-circle text-danger me-2"></i>هرگونه استفاده غیرمجاز از
+                                    محصولات عرضه شده، مسئولیت کیفری و حقوقی متوجه خریدار خواهد بود.
+                                </li>
+                                <li class="list-group-item bg-transparent"><i class="fas fa-ban text-danger me-2"></i>فروشگاه
+                                    در قبال سوءاستفاده از محصولات برای اهداف غیرکشاورزی مسئولیتی ندارد.
+                                </li>
+                                <li class="list-group-item bg-transparent"><i
+                                        class="fas fa-gavel text-secondary me-2"></i>اختلافات
+                                    احتمالی طبق قوانین جاری جمهوری اسلامی ایران در مراجع قضایی اصفهان رسیدگی خواهد شد.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-terms-conditions">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-user-shield fa-lg text-primary me-2"></i>
+                        <h3>مقررات حریم خصوصی</h3>
+                    </div>
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <p><i class="fas fa-lock text-success me-2"></i>کلیه اطلاعات شخصی کاربران مطابق با قانون
+                                حمایت
+                                از داده‌های شخصی (مصوب 1400) محافظت شده و هرگونه
+                                استفاده تجاری از این اطلاعات ممنوع می‌باشد.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-terms-conditions">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-sync fa-lg text-warning me-2"></i>
+                        <h3>تغییرات در قوانین</h3>
+                    </div>
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <p><i class="fas fa-bell text-info me-2"></i>فروشگاه کشت آذر پاسارگاد حق به روزرسانی و تغییر
+                                این
+                                شرایط را در هر زمان با اعلام قبلی از طریق وبسایت
+                                محفوظ می‌دارد.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-terms-conditions">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-address-card fa-lg text-success me-2"></i>
+                        <h3>اطلاعات تماس</h3>
+                    </div>
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p><i class="fas fa-building text-primary me-2"></i>شماره ثبت : ۵۴۲۱۶۱ اصفهان
+                                    </p>
+                                    <p><i class="fas fa-map-marker-alt text-danger me-2"></i>نشانی دفتر مرکزی: اصفهان،
+                                        شهرضا، خیابان حافظ شرقی نبش فرعی۳۴</p>
+                                    <p><i class="fas fa-phone-alt text-success me-2"></i>تلفن پشتیبانی حقوقی:
+                                        ۰۳۱-۵۳۵۴۴۲۰۶
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-flex justify-content-center">
+                                        <a href="https://goo.gl/maps/yourLocation" target="_blank"
+                                           class="btn btn-outline-primary">
+                                            <i class="fas fa-directions me-2"></i>مسیریابی دفتر مرکزی
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="row mt-5">
+                    <div class="col-lg-12">
+                        <div class="card bg-success text-white border-0 shadow">
+                            <div class="card-body p-4 text-center">
+                                <h4><i class="fas fa-seedling me-2"></i>برای مشاوره رایگان درباره محصولات کشاورزی با ما
+                                    در
+                                    تماس باشید</h4>
+                                <p class="mb-0 text-white">کارشناسان ما آماده پاسخگویی به سؤالات شما در زمینه سموم و
+                                    کودهای
+                                    کشاورزی هستند</p>
+                                <a href="{% url 'contact_us' %}" class="btn btn-light text-success mt-3">
+                                    <i class="fas fa-headset me-2"></i>تماس با کارشناسان
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </section>
+    <!-- End Terms & Conditions Section -->
+
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}

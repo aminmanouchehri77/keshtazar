@@ -1,0 +1,99 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="page-title-area">
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="container">
+                    <div class="page-title-content">
+                        <h2>ورود / ثبت نام</h2>
+                        <ul>
+                            <li><a href="{% url 'index' %}">خانه</a></li>
+                            <li>ورود / ثبت نام</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Title Area -->
+    <div class="container-fluid agricultural-bg">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-lg rounded-4 border-success">
+                    <div class="card-header bg-success text-white text-center py-4">
+                        <h2 class="mb-0">
+                            <i class="fas fa-tractor me-2"></i>
+                            ورود/ثبت نام
+                        </h2>
+                    </div>
+
+                    <div class="card-body p-5">
+                        <form method="POST" action="{% url 'accounts:login' %}">
+                            {% csrf_token %}
+
+                            <div class="mb-4">
+                                <label for="mobile" class="form-label text-success fw-bold">
+                                    <i class="fas fa-mobile-alt me-2"></i>
+                                    شماره موبایل
+                                </label>
+                                <input type="tel"
+                                       class="form-control form-control-lg {% if messages %}is-invalid{% endif %}"
+                                       id="mobile"
+                                       name="mobile"
+                                       placeholder="09xxxxxxxxx"
+                                       pattern="09[0-9]{9}"
+                                       required>
+                                <div class="invalid-feedback">
+                                    {% for message in messages %}
+                                        {{ message }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <button type="submit"
+                                    class="btn btn-success btn-lg w-100 rounded-pill py-3 fs-5">
+                                دریافت کد تایید
+                                <i class="fas fa-sign-in-alt ms-2"></i>
+                            </button>
+                        </form>
+
+                        <div class="mt-4 text-center">
+                            <p class="text-muted">
+                                با ورود/ثبت نام شما
+                                <a href="{% url 'terms_condition' %}" class="text-success text-decoration-none">قوانین و مقررات</a>
+                                ما را می پذیرید.
+                            </p>
+                            <div class="agricultural-icons mt-3">
+                                <i class="fas fa-seedling text-success mx-3"></i>
+                                <i class="fas fa-leaf text-success mx-3"></i>
+                                <i class="fas fa-apple-alt text-success mx-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .agricultural-bg {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
+            url('{% static "images/farm-bg.jpg" %}');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .agricultural-icons {
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+
+        .card {
+            border-width: 2px;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+{% endblock %}

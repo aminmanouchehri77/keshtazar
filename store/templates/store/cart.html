@@ -1,0 +1,386 @@
+{% extends '_base.html' %}
+{% load custom_filters %}
+{% block title %}
+    سبد خرید
+{% endblock %}
+
+{% block content %}
+    <!-- Start Page Title Area -->
+    <div class="page-title-area item-bg2">
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="container">
+                    <div class="page-title-content">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Title Area -->
+
+    <!-- Start Cart Area -->
+    <section class="cart-area ptb-100">
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="cart-wraps">
+                        <div class="cart-table table-responsive">
+                            {% if cart.cart_len == 0 %}
+                                <div class="container">
+                                    <h5 style="color: red">محصولی در سبد خرید شما وجود ندارد.</h5>
+                                </div>
+                            {% else %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">محصول</th>
+                                        <th scope="col">نام</th>
+                                        <th scope="col">قیمت واحد</th>
+                                        <th scope="col">تعداد</th>
+                                        <th scope="col">مجموع</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {% for item in cart %}
+                                        <tr>
+                                            <td class="product-thumbnail">
+                                                <a href="#">
+                                                    <img src="{{ item.product.image.url }}"
+                                                         alt="{{ item.product.name }}">
+                                                </a>
+                                            </td>
+
+                                            <td class="product-name">
+                                                <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
+                                            </td>
+
+                                            <td class="product-price">
+                                                <span class="unit-amount">{{ item.product.unit_price|comma_separator }} تومان</span>
+                                            </td>
+
+                                            <td class="product-quantity" data-inventory="{{ item.product.inventory }}">
+                                                {% if item.product.inventory == 0 %}
+                                                    <span style="color: red; font-weight: bold;">موجودی این محصول به پایان رسیده است.</span>
+                                                {% else %}
+                                                    <form class="quantity-form" data-product-id="{{ item.product.id }}">
+                                                        {% csrf_token %}
+                                                        <div class="input-counter">
+                                                            <span class="minus-btn"><i class="fa fa-minus"></i></span>
+                                                            <input type="text" name="quantity_{{ item.product.id }}"
+                                                                   value="{{ item.quantity }}" readonly>
+                                                            <span class="plus-btn"><i class="fa fa-plus"></i></span>
+                                                        </div>
+                                                        <div class="inventory-warning text-danger mt-1"
+                                                             style="display: none; font-size: 12px;">
+                                                            بیشتر از این تعداد در انبار موجود نیست
+                                                        </div>
+                                                    </form>
+                                                {% endif %}
+                                            </td>
+
+                                            <td class="product-subtotal">
+                                                <span class="subtotal-amount">{{ item.total_price|comma_separator }} تومان</span>
+                                                <a href="{% url 'remove_from_cart' item.product.id %}" class="remove">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+
+                            <div class="cart-buttons">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-7 col-sm-7 col-md-7">
+                                        <div class="continue-shopping-box">
+                                            <a href="{% url 'product_list' %}" class="default-btn">
+                                                بازگشت به فروشگاه
+                                                <span></span>
+                                                <i class="flaticon-left"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="coupon-wrap">
+                                    <div class="shops-form">
+                                        <h3>محاسبه کرایه حمل</h3>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <select name="shipping_type" id="shipping_type" class="form-control">
+                                                    <option value="">تغییر نوع ارسال</option>
+                                                    <option value="tipax">تیپاکس (30,000 تومان+پس کرایه)</option>
+                                                    <option value="freight">باربری (30,000 تومان+پس کرایه)</option>
+                                                    <option value="city">ارسال درون شهری (شهرضا و اطراف(پس کرایه))
+                                                    </option>
+                                                    <option value="pickup">تحویل حضوری (رایگان)</option>
+                                                </select>
+                                                <div id="shipping_error" class="text-danger mt-2"
+                                                     style="display: none;">
+                                                    لطفا نوع ارسال را انتخاب کنید
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="toast-container position-fixed top-0 end-0 p-3"
+                                             style="z-index: 9999"></div>
+
+                                        <div class="input-group mb-3">
+                                            <input type="text" id="discount_code" class="form-control"
+                                                   placeholder="کد تخفیف خود را وارد کنید"
+                                                   aria-label="کد تخفیف">
+                                            <button class="btn btn-outline-success" type="button" id="apply_discount">
+                                                اعمال تخفیف
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="cart-totals">
+                                    <h3>مجموع خرید</h3>
+                                    <ul>
+                                        <li>قیمت محصول
+                                            <span>{{ cart.get_total_price|floatformat:"0"|comma_separator }} تومان</span>
+                                        </li>
+                                        <li>کرایه حمل
+                                            <span id="shipping_cost">
+{% if shipping_cost %}
+    {{ shipping_cost|comma_separator }} تومان
+{% else %}
+    0 تومان
+{% endif %}
+</span>
+                                        </li>
+                                        <li>تخفیف
+                                            <span id="discount_amount" class="text-success">
+{% if discount_amount %}
+    {{ discount_amount|comma_separator }} تومان
+{% else %}
+    0 تومان
+{% endif %}
+</span>
+                                        </li>
+                                        <li>مجموع
+                                            <span id="total_amount">
+<b>
+{% if total_amount %}
+    {{ total_amount|comma_separator }} تومان
+{% else %}
+    {{ cart.get_total_price|floatformat:"0"|comma_separator }} تومان
+{% endif %}
+</b>
+</span>
+                                        </li>
+                                    </ul>
+                                    <a href="{% url 'checkout' %}" id="checkout_btn" class="default-btn">
+                                        ادامه پرداخت
+                                        <span></span>
+                                        <i class="flaticon-left"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Cart Area -->
+
+    <!-- JavaScript Section -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // مدیریت تعداد محصولات
+            $('.quantity-form').each(function () {
+                const $form = $(this);
+                const productId = $form.data('product-id');
+                const $quantityWrapper = $form.find('.input-counter');
+                const $input = $form.find('input[type="text"]');
+                const inventory = parseInt($form.closest('.product-quantity').data('inventory'));
+                const $minusBtn = $form.find('.minus-btn');
+                const $plusBtn = $form.find('.plus-btn');
+                const $inventoryWarning = $form.find('.inventory-warning');
+
+                // بررسی اولیه وضعیت دکمه‌ها
+                updateButtonVisibility(parseInt($input.val()), inventory);
+
+                // مدیریت کلیک دکمه‌ها
+                $quantityWrapper.on('click', '.plus-btn, .minus-btn', function (e) {
+                    e.preventDefault();
+                    const $this = $(this);
+                    let currentVal = parseInt($input.val());
+
+                    if ($this.hasClass('plus-btn')) {
+                        if (currentVal < inventory) {
+                            currentVal++; // Increment the value
+                        }
+                    } else {
+                        if (currentVal > 1) {
+                            currentVal--; // Decrement the value
+                        }
+                    }
+
+                    // Update the input value
+                    $input.val(currentVal);
+
+                    // Update button visibility
+                    updateButtonVisibility(currentVal, inventory);
+
+                    // Send AJAX request with updated value
+                    $.ajax({
+                        url: "{% url 'add_to_cart' %}",
+                        method: 'POST',
+                        data: {
+                            'product_id': productId,
+                            'quantity': currentVal,
+                            'update1': '1',
+                            'csrfmiddlewaretoken': $form.find('input[name="csrfmiddlewaretoken"]').val()
+                        },
+                        success: function (response) {
+                            location.reload();
+                        },
+                        error: function (xhr) {
+                            showToast('danger', 'خطا در بروزرسانی سبد خرید');
+                            // Revert to previous value on error
+                            if ($this.hasClass('plus-btn')) {
+                                $input.val(currentVal - 1);
+                            } else {
+                                $input.val(currentVal + 1);
+                            }
+                        }
+                    });
+                });
+
+
+                // تابع بروزرسانی وضعیت دکمه‌ها
+                function updateButtonVisibility(quantity, inventory) {
+                    // پنهان کردن دکمه منها اگر تعداد 1 باشد
+                    $minusBtn.toggle(quantity > 1);
+
+                    // بررسی و نمایش پیغام هشدار موجودی
+                    if (quantity >= inventory) {
+                        $plusBtn.hide();
+                        $inventoryWarning.show();
+                    } else {
+                        $plusBtn.show();
+                        $inventoryWarning.hide();
+                    }
+                }
+            });
+
+
+            // مدیریت ارسال
+            function validateAndUpdate() {
+                const shippingType = $('#shipping_type').val();
+                const validTypes = ['tipax', 'freight', 'city', 'pickup'];
+                const isValid = validTypes.includes(shippingType);
+
+                $('#shipping_error').toggle(!isValid);
+                $('#checkout_btn').toggle(isValid);
+
+                if (isValid) {
+                    updateShippingCost(shippingType);
+                }
+            }
+
+            function updateShippingCost(type) {
+                $.ajax({
+                    url: "{% url 'update_shipping' %}",
+                    method: 'POST',
+                    data: {
+                        'shipping_type': type,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        // تبدیل اعداد به فرمت با کاما
+                        const shippingCost = Number(response.shipping_cost).toLocaleString();
+                        const totalAmount = Number(response.total_amount).toLocaleString();
+
+                        $('#shipping_cost').text(shippingCost + ' تومان');
+                        $('#total_amount b').text(totalAmount + ' تومان');
+                    },
+                    error: function (xhr) {
+                        showToast('danger', 'خطا در بروزرسانی هزینه ارسال');
+                    }
+                });
+            }
+
+            // مدیریت تخفیف
+            $('#apply_discount').click(function (e) {
+                e.preventDefault();
+                const discountCode = $('#discount_code').val();
+
+                $.ajax({
+                    url: "{% url 'apply_discount' %}",
+                    method: 'POST',
+                    data: {
+                        'discount_code': discountCode,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            const discountAmount = Number(response.discount_amount || 0).toLocaleString();
+                            const totalAmount = Number(response.total_amount).toLocaleString();
+
+                            $('#discount_amount').text(discountAmount + ' تومان');
+                            $('#total_amount b').text(totalAmount + ' تومان');
+                            showToast('success', 'تخفیف با موفقیت اعمال شد');
+                        } else {
+                            showToast('danger', response.message);
+                            if (response.redirect_url) {
+                                window.location.href = response.redirect_url;
+                            }
+                        }
+                    },
+                    error: function (xhr) {
+                        showToast('danger', 'خطا در ارتباط با سرور');
+                    }
+                });
+            });
+            // مدیریت اولیه
+            validateAndUpdate();
+            $('#shipping_type').change(validateAndUpdate);
+        });
+
+        function showToast(type, message) {
+            const toastContainer = $('.toast-container');
+            const toastId = 'toast-' + Date.now();
+
+            const toast = $(`
+        <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `);
+
+            toastContainer.append(toast);
+            new bootstrap.Toast(toast[0]).show();
+
+            setTimeout(() => toast.remove(), 5000);
+        }
+
+
+    </script>
+    <!-- در بخش پایینی قالب قبل از بستن تگ body -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 11"></div>
+
+
+{% endblock %}

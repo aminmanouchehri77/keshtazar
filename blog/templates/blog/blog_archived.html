@@ -1,0 +1,497 @@
+{% extends '_base.html' %}
+{% load jalali_tags %}
+{% block title %}
+    {{ archive.name }}
+{% endblock %}
+
+{% block content %}
+    <style>
+
+        /* استایل کلی بخش بلاگ */
+        .blog-section {
+            padding: 80px 0;
+            background-color: #f9f9f9;
+        }
+
+        /* استایل کارت مقالات */
+        .single-blog-item-two {
+            background-color: #fff;
+            margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .single-blog-item-two:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* استایل تصاویر مقالات */
+        .blog-image {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-image:hover img {
+            transform: scale(1.1);
+        }
+
+        /* استایل محتوای مقالات */
+        .blog-content {
+            padding: 20px;
+        }
+
+        .blog-content span {
+            color: #23a61e;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .blog-content h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+            line-height: 1.4;
+        }
+
+        .blog-content h3 a {
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+
+        .blog-content h3 a:hover {
+            color: #eae71e;
+        }
+
+        .blog-content p {
+            color: #ffffff;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* استایل دکمه بیشتر بدانید */
+        .blog-btn-one {
+            display: inline-flex;
+            align-items: center;
+            color: #23a61e;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .blog-btn-one i {
+            margin-right: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-btn-one:hover {
+            color: #1b8017;
+        }
+
+        .blog-btn-one:hover i {
+            transform: translateX(5px);
+        }
+
+        /* استایل بخش عنوان صفحه */
+        .page-title-area {
+            background-color: #f5f5f5;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-title-content h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .page-title-content ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        .page-title-content ul li {
+            display: inline-block;
+            margin: 0 5px;
+            color: #666;
+        }
+
+        .page-title-content ul li a {
+            color: #23a61e;
+            transition: all 0.3s ease;
+        }
+
+        .page-title-content ul li a:hover {
+            color: #1b8017;
+        }
+
+        /* استایل بخش pagination */
+        .pagination-area {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pagination-area .page-numbers {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .pagination-area .page-numbers.current {
+            background-color: #23a61e;
+            color: #fff;
+        }
+
+        .pagination-area .page-numbers:hover {
+            background-color: #23a61e;
+            color: #fff;
+        }
+
+        .pagination-area .prev.page-numbers,
+        .pagination-area .next.page-numbers {
+            width: auto;
+            padding: 0 15px;
+        }
+
+        /* استایل سایدبار بلاگ */
+        .widget-area {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+
+        .widget {
+            margin-bottom: 30px;
+        }
+
+        .widget:last-child {
+            margin-bottom: 0;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .widget-title:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            right: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #23a61e;
+        }
+
+        /* استایل فرم جستجو */
+        .widget_search form {
+            position: relative;
+        }
+
+        .widget_search input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #f0f0f0;
+            background-color: #f9f9f9;
+            padding: 0 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .widget_search button {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            height: 40px;
+            width: 40px;
+            background-color: #23a61e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .widget_search button:hover {
+            background-color: #1b8017;
+        }
+
+        /* استایل لیست‌های سایدبار */
+        .widget ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        .widget ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .widget ul li:last-child {
+            border-bottom: none;
+        }
+
+        .widget ul li a {
+            color: #666;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .widget ul li a:hover {
+            color: #23a61e;
+            padding-right: 5px;
+        }
+
+        /* استایل responsive برای بخش بلاگ */
+        @media (max-width: 991px) {
+            .widget-area {
+                margin-top: 50px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .page-title-area {
+                padding: 40px 0;
+            }
+
+            .page-title-content h2 {
+                font-size: 26px;
+            }
+
+            .blog-section {
+                padding: 60px 0;
+            }
+
+            .single-blog-item-two {
+                margin-bottom: 25px;
+            }
+
+            .blog-image {
+                height: 200px;
+            }
+
+            .blog-content h3 {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .widget-area {
+                padding: 20px;
+            }
+
+            .blog-image {
+                height: 180px;
+            }
+
+            .blog-content {
+                padding: 15px;
+            }
+
+            .blog-content h3 {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .pagination-area .page-numbers {
+                width: 35px;
+                height: 35px;
+                margin: 0 3px;
+            }
+        }
+    </style>
+
+
+
+    <!-- Start Page Title Area -->
+    <div class="page-title-area">
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="container">
+                    <div class="page-title-content">
+                        <h2>{{ archive.name }}</h2>
+                        <ul>
+                            <li><a href="{% url 'index' %}">خانه</a></li>
+                            <li>{{ archive.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Title Area -->
+
+    <!-- Start Blog Section -->
+    <section class="blog-section ptb-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-12">
+                    <div class="row">
+                        {% for archive_post in archived_blogs %}
+                            <div class="col-lg-6 col-md-6">
+                                <div class="single-blog-item-two">
+                                    <div class="blog-image">
+                                        <img src="{{ archive_post.image.url }}" alt="image"
+                                             style="width: 100%; height: 250px; object-fit: cover;">
+                                    </div>
+
+                                    <div class="blog-content">
+                                        <span>{{ archive_post.date_posted|to_jalali:'%Y/%m/%d' }}،{{ archive_post.category }}</span>
+
+                                        <h3>{{ archive_post.title }}</h3>
+                                        <p>{{ archive_post.text|truncatewords:10 }}</p>
+
+                                        <div class="blog-btn">
+                                            <a href="{{ archive_post.get_absolute_url }}" class="blog-btn-one">
+                                                بیشتر بدانید
+                                                <i class="flaticon-plus"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+
+                        <div class="col-lg-12 col-md-12">
+                            <div class="pagination-area">
+                                {% if page_obj.has_previous %}
+                                    <a href="?page={{ page_obj.previous_page_number }}" class="prev page-numbers"><i
+                                            class="fas fa-angle-double-right"></i></a>
+                                {% endif %}
+                                <a href="{{ page_obj.number }}" class="page-numbers">1</a>
+                                {% if page_obj.has_next %}
+                                    <a href="?page={{ page_obj.next_page_number }}" class="next page-numbers"><i
+                                            class="fas fa-angle-double-left"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-12">
+                    <aside class="widget-area" id="secondary">
+                        <section class="widget widget_search">
+                            <form class="search-form search-top" action="{% url 'blog_search' %}" method="get">
+                                {% csrf_token %}
+                                <label>
+                                    <span class="screen-reader-text">Search for:</span>
+                                    <input class="search-field" name="search" placeholder="جستجو...">
+                                </label>
+                                <button type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+                        </section>
+
+                        <section class="widget widget_categories">
+                            <h3 class="widget-title">دسته بندی ها</h3>
+                            <ul>
+                                {% for category in blog_categories %}
+                                    <li>
+                                        <a href="{% url 'blog_category' category.id %}">{{ category.name }}</a>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </section>
+
+
+                        <section class="widget widget_recent_entries">
+                            <h3 class="widget-title">پستهای اخیر</h3>
+                            <ul>
+                                {% for latest_post in blog_latest_posts %}
+                                    <li>
+                                        <a href="{{ latest_post.get_absolute_url }}">{{ latest_post.title }}</a>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </section>
+
+
+                        <section class="widget widget_archive">
+                            <h3 class="widget-title">بایگانی</h3>
+                            <ul>
+                                {% for archive in archives %}
+                                    <li>
+                                        <a href="{% url 'blog_archive' archive.id %}">{{ archive.name }}</a>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </section>
+
+                        {#                        <section class="widget widget_tag_cloud">#}
+                        {#                            <h3 class="widget-title">برچسب ها</h3>#}
+                        {#                            <div class="tagcloud section-bottom">#}
+                        {#                                <a href="#">#}
+                        {#                                    آی تی#}
+                        {#                                    <span class="tag-link-count"> (3)</span>#}
+                        {#                                </a>#}
+                        {#                                <a href="#">#}
+                        {#                                    جزئیات#}
+                        {#                                    <span class="tag-link-count"> (3)</span>#}
+                        {#                                </a>#}
+                        {#                                <a href="#">#}
+                        {#                                    بازی#}
+                        {#                                    <span class="tag-link-count"> (2)</span>#}
+                        {#                                </a>#}
+                        {#                                <a href="#">#}
+                        {#                                    مد#}
+                        {#                                    <span class="tag-link-count"> (2)</span>#}
+                        {#                                </a>#}
+                        {#                                <a href="#">#}
+                        {#                                    مسافرت#}
+                        {#                                    <span class="tag-link-count"> (1)</span>#}
+                        {#                                </a>#}
+                        {#                                <a href="#">#}
+                        {#                                    هوشمند#}
+                        {#                                    <span class="tag-link-count"> (1)</span>#}
+                        {#                                </a>#}
+                        {#                                <a href="#">#}
+                        {#                                    بازاریابی#}
+                        {#                                    <span class="tag-link-count"> (1)</span>#}
+                        {#                                </a>#}
+                        {#                                <a href="#">#}
+                        {#                                    نکات#}
+                        {#                                    <span class="tag-link-count"> (2)</span>#}
+                        {#                                </a>#}
+                        {#                            </div>#}
+                        {#                        </section>#}
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Blog Section -->
+
+
+{% endblock %}

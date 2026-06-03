@@ -1,0 +1,2630 @@
+{% load jalali_tags %}
+{% load static %}
+{% load custom_filters %}
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords"
+          content="HTML5,CSS3,HTML,Template,multi-page,Trifles - Agriculture and Organic Food HTML Template">
+    <meta name="description" content="Trifles - Agriculture and Organic Food HTML Template">
+    <meta name="author" content="Barat Hadian">
+    <meta name="enamad" content="57939273"/>
+    <link rel="stylesheet" href="{% static "css/bootstrap.rtl.min.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/animate.min.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/fontawesome.min.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/flaticon.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/magnific-popup.min.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/owl.carousel.min.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/imagelightbox.min.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/nice-select.min.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/meanmenu.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/odometer.min.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/responsive.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/rtl.css" %}">
+
+
+    <title>فروشگاه کشت آذر پاسارگاد</title>
+
+    <link rel="icon" type="image/png" href="{% static "img/favicon.png" %}">
+    <style>
+
+        /* استایل پایه برای آیکون‌های موبایل */
+        .mobile-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* استایل منوی همبرگر موبایل */
+        .mobile-menu-toggle {
+            width: 20px;
+            height: 15px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        /* انیمیشن منوی همبرگر در حالت فعال */
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(2px, 2px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* تنظیم موقعیت آیکون‌ها */
+        .mobile-icons .mobile-menu-toggle {
+            position: relative;
+            top: -2px; /* جابجایی منوی همبرگر به بالا */
+        }
+
+        .mobile-icons .cart-btn a i.fa-shopping-cart {
+            position: relative;
+            top: 0px; /* جابجایی آیکون سبد خرید به پایین */
+        }
+
+        /* تنظیم آیکون سبد خرید در نسخه دسکتاپ */
+        .trifles-nav .cart-btn a i.fa-shopping-cart {
+            position: relative;
+            top: 2px;
+        }
+
+        /* استایل دکمه‌های فرم در منو */
+        .nav-link form button.btn-link {
+            color: inherit;
+            text-decoration: none;
+            padding: 0;
+            border: none;
+            background: none;
+            transition: color 0.3s ease;
+        }
+
+        /* استایل hover برای لینک‌ها */
+        .nav-link:hover form button.btn-link,
+        .nav-link:hover form button.btn-link i {
+            color: #ff0000 !important;
+        }
+
+        .nav-link form button.btn-link:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        /* استایل بخش پیام‌ها */
+        .messages-area {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            max-width: 850px;
+            width: auto;
+            z-index: 9999;
+        }
+
+        /* Make alerts more responsive */
+        .alert {
+            position: relative;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            opacity: 0.98;
+            display: flex;
+            align-items: center;
+            animation: slideInFromLeft 0.5s ease-out;
+        }
+
+        /* Responsive adjustments for alerts */
+        @media (max-width: 767px) {
+            .messages-area {
+                top: 70px;
+                left: 10px;
+                right: 10px;
+                max-width: calc(100% - 20px);
+            }
+
+            .alert {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .alert-content {
+                white-space: normal;
+                overflow: visible;
+            }
+
+            /* Adjust the product added message for mobile */
+            .alert-success.product-added {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .alert-success.product-added .alert-content {
+                margin-bottom: 8px;
+            }
+
+            /* If you have product image in the alert */
+            .alert-success.product-added img {
+                max-width: 40px;
+                max-height: 40px;
+                margin-left: 8px;
+            }
+        }
+
+        /* For very small screens */
+        @media (max-width: 480px) {
+            .messages-area {
+                top: 60px;
+            }
+
+            .alert {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .alert i.fas {
+                font-size: 16px;
+                margin-left: 8px;
+            }
+
+            .alert-dismissible .close-btn {
+                width: 20px;
+                height: 20px;
+                font-size: 16px;
+            }
+        }
+
+        /* استایل تصاویر محصولات */
+        .shop-image {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .shop-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+
+        .shop-image:hover img {
+            transform: scale(1.1);
+        }
+
+        /* استایل کارت محصول */
+        .shop-item-two {
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .shop-item-two:hover {
+            transform: translateY(-5px);
+        }
+
+        .shop-content {
+            padding: 15px;
+        }
+
+        .shop-content h3 {
+            margin-bottom: 10px;
+        }
+
+        .shop-content h3 a {
+            color: #333333;
+            transition: color 0.3s ease;
+        }
+
+        .shop-content h3 a:hover {
+            color: #ff6b6b;
+        }
+
+        .shop-content p {
+            margin-bottom: 10px;
+        }
+
+        .shop-content span {
+            font-weight: bold;
+            color: #23a61e;
+            font-size: 1.1em;
+        }
+
+        /* استایل آیکون‌های وضعیت محصول */
+        .shop-content p i {
+            margin-left: 5px;
+        }
+
+        .shop-content p .red-cross {
+            color: #ff6b6b;
+        }
+
+        /* استایل دکمه افزودن به سبد خرید */
+        .shop-icon {
+            padding: 10px;
+            margin: 0;
+            text-align: center;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .shop-icon .big-icon a {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            background: #23a61e;
+            color: #ffffff;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .shop-icon .big-icon a:hover {
+            background: #1b8017;
+            transform: rotate(180deg);
+        }
+
+        /* حفظ رنگ‌ها در حالت hover */
+        .shop-item-two:hover .shop-content p .red-cross {
+            color: #21be0f !important;
+        }
+
+        .shop-item-two:hover .shop-content p[style*="color: red"] {
+            color: #ff6b6b !important;
+        }
+
+        /* استایل‌های ریسپانسیو */
+        @media (max-width: 991px) {
+            /* نمایش منوی موبایل و مخفی کردن منوی دسکتاپ */
+            .trifles-responsive-nav {
+                display: block;
+            }
+
+            .trifles-nav {
+                display: none;
+            }
+
+            /* مخفی کردن منوی همبرگر قدیمی */
+            .trifles-responsive-nav .burger-menu,
+            .trifles-responsive-nav .meanmenu-reveal,
+            .trifles-responsive-nav .mean-bar,
+            .trifles-responsive-nav .mean-nav .meanmenu-reveal,
+            .trifles-responsive-nav .mobile-menu .meanmenu-reveal,
+            .trifles-responsive-nav .mobile-menu-icon {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+
+            /* پاپ آپ جستجو برای موبایل */
+            .trifles-responsive-nav .search-overlay.search-popup {
+                position: absolute;
+                left: -15px; /* تغییر از right به left */
+                right: auto;
+                top: 125%;
+                width: 300px;
+                z-index: 999;
+                border-radius: 5px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                background: #fff;
+                padding: 15px;
+                max-width: calc(100vw - 30px);
+                transition: all 0.3s ease;
+                display: none;
+            }
+
+            .trifles-responsive-nav .search-overlay.search-popup.active {
+                display: block;
+            }
+
+            /* استایل سبد خرید در موبایل */
+            .trifles-responsive-nav .cart-btn a {
+                color: #333;
+                position: relative;
+                font-size: 20px;
+            }
+
+            .trifles-responsive-nav .cart-btn span {
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                background-color: #23a61e;
+                color: #fff;
+                border-radius: 50%;
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+                text-align: center;
+                line-height: 18px;
+            }
+
+            /* استایل آیکون جستجو */
+            .trifles-responsive-nav .search-btn {
+                cursor: pointer;
+                font-size: 20px;
+                color: #333;
+            }
+
+            .trifles-responsive-nav .close-btn {
+                display: none;
+                cursor: pointer;
+                font-size: 20px;
+                color: #333;
+            }
+
+            /* منوی موبایل */
+            .mobile-nav-menu {
+                display: none;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: #fff;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                height: calc(100vh - 70px);
+                overflow-y: auto;
+            }
+
+            .mobile-nav-menu.active {
+                display: block;
+                animation: fadeIn 0.3s ease;
+            }
+
+            .mobile-nav-menu ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .mobile-nav-menu ul li {
+                padding: 12px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .mobile-nav-menu ul li:last-child {
+                border-bottom: none;
+            }
+
+            .mobile-nav-menu ul li a {
+                color: #333;
+                text-decoration: none;
+                display: block;
+                font-size: 16px;
+            }
+
+            .mobile-nav-menu ul li a:hover {
+                color: #23a61e;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* تنظیمات برای صفحات موبایل */
+            .messages-area {
+                left: 10px;
+                right: 10px;
+                max-width: calc(100% - 20px);
+                width: auto;
+                top: 70px;
+            }
+
+            .alert {
+                white-space: normal; /* در صفحات کوچک، متن می‌تواند به خط بعد برود */
+            }
+
+            /* تنظیم اندازه تصاویر محصولات */
+            .shop-image {
+                height: 200px;
+            }
+
+            /* تنظیم گرید محصولات - هر ردیف 2 محصول */
+            .shop-item-two {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            /* تنظیمات مخصوص موبایل‌های کوچک */
+            .shop-image {
+                height: 160px;
+            }
+
+            /* هر ردیف فقط 1 محصول برای موبایل‌های خیلی کوچک */
+            .shop-item-two {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* انیمیشن پاپ آپ جستجو */
+        .search-popup {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            display: none;
+            z-index: 999;
+            width: 300px;
+        }
+
+        .search-popup.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* نوبار چسبان */
+        .is-sticky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.09);
+            background-color: #ffffff !important;
+            animation: 500ms ease-in-out 0s normal none 1 running fadeInDown;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* تنظیم دکمه بستن مودال سایدبار */
+        .sidebar-modal-close-btn {
+            position: relative;
+            right: 10px;
+            font-size: 20px;
+            width: 30px;
+            height: 30px;
+        }
+
+        /* استایل‌های ریسپانسیو نوبار و منوی موبایل */
+        .trifles-responsive-menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        /* New styles for navbar and banner */
+        .home-banner-two {
+            position: relative;
+            z-index: 1;
+        }
+
+        .home-banner-two .main-banner-content {
+            position: relative;
+            z-index: 2;
+            max-width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Add responsive padding to ensure text visibility */
+        @media (max-width: 1200px) {
+            .home-banner-two .main-banner-content {
+                max-width: 90%;
+                padding-top: 40px;
+            }
+        }
+
+        @media (max-width: 991px) {
+            .home-banner-two .main-banner-content {
+                max-width: 95%;
+                padding-top: 80px;
+            }
+
+            .home-banner-two .main-banner-content h1 {
+                font-size: 32px;
+            }
+        }
+
+
+        @media (max-width: 767px) {
+            .home-banner-two .main-banner-content {
+                padding-top: 80px;
+            }
+
+            .home-banner-two .main-banner-content h1 {
+                font-size: 28px;
+            }
+
+            .home-banner-two .main-banner-content p {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .home-banner-two .main-banner-content {
+                padding-top: 100px;
+            }
+
+            .home-banner-two .main-banner-content h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* استایل بخش مقالات */
+        .blog-section {
+            background-color: #f9f9f9;
+            padding: 80px 0;
+        }
+
+        .single-blog-item-two {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .single-blog-item-two:hover {
+            transform: translateY(-5px);
+        }
+
+        /* استایل تصاویر مقالات */
+        .blog-image {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-image:hover img {
+            transform: scale(1.1);
+        }
+
+        /* استایل محتوای مقالات */
+        .blog-content {
+            padding: 20px;
+        }
+
+        .blog-content span {
+            color: #23a61e;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .blog-content h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+            line-height: 1.4;
+        }
+
+        .blog-content h3 a {
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .blog-content h3 a:hover {
+            color: #23a61e;
+        }
+
+        .blog-content p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* استایل دکمه بیشتر بدانید */
+        .blog-btn-one {
+            display: inline-flex;
+            align-items: center;
+            color: #23a61e;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .blog-btn-one i {
+            margin-right: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-btn-one:hover {
+            color: #1b8017;
+        }
+
+        .blog-btn-one:hover i {
+            transform: translateX(5px);
+        }
+
+        /* --- بزرگنمایی آیکون‌های هدر در حالت ریسپانسیو (تبلت و موبایل) --- */
+        /* --- استایل مخصوص تبلت و گوشی‌های بزرگ (فقط بین 490px تا 991px) --- */
+        @media (min-width: 490px) and (max-width: 991px) {
+
+            /* 1. تنظیم فاصله بیشتر بین آیکون‌ها */
+            .mobile-icons {
+                gap: 25px !important;
+            }
+
+            /* 2. بزرگ کردن آیکون جستجو و بستن */
+            .trifles-responsive-nav .search-btn,
+            .trifles-responsive-nav .close-btn {
+                font-size: 32px !important;
+                font-weight: bold;
+            }
+
+            /* 3. بزرگ کردن آیکون سبد خرید */
+            .trifles-responsive-nav .cart-btn a {
+                font-size: 32px !important;
+            }
+
+            /* تنظیم موقعیت دایره سبز روی سبد خرید */
+            .trifles-responsive-nav .cart-btn span {
+                top: -6px !important;
+                right: -10px !important;
+                width: 22px;
+                height: 22px;
+                line-height: 22px;
+                font-size: 12px;
+                font-weight: bold;
+            }
+
+            /* 4. بزرگ کردن کلید منوی همبرگری */
+            .mobile-menu-toggle {
+                width: 35px !important;
+                height: 26px !important;
+            }
+
+            /* ضخیم کردن خطوط منو */
+            .mobile-menu-toggle span {
+                height: 4px !important;
+                border-radius: 5px;
+                background-color: #333;
+            }
+
+            /* اصلاح انیمیشن ضربدر شدن برای این سایز */
+            .mobile-menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 6px) !important;
+            }
+
+            .mobile-menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -6px) !important;
+            }
+        }
+
+
+    </style>
+    <style>
+        @media (max-width: 767px) {
+
+            /* --- بخش 1: کانتینر اصلی --- */
+            .row:has(.single-fun-fact) {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                padding: 25px 15px 40px 15px !important;
+                gap: 15px !important;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                direction: rtl !important;
+                justify-content: flex-start !important;
+            }
+
+            .row:has(.single-fun-fact)::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* --- بخش 2: ابعاد ستون‌ها --- */
+            .row:has(.single-fun-fact) > div {
+                flex: 0 0 auto !important;
+                width: 145px !important;
+                max-width: 145px !important;
+                padding: 0 !important;
+            }
+
+            /* --- بخش 3: دیزاین کارت --- */
+            .single-fun-fact {
+                background: #fff !important;
+                border-radius: 20px !important;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08) !important;
+                padding: 20px 10px !important;
+                text-align: center !important;
+                height: 100% !important;
+                border: 1px solid rgba(0, 0, 0, 0.02) !important;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            /* --- بخش 4: چیدمان عدد و پلاس --- */
+            .single-fun-fact h3 {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                margin-bottom: 12px !important;
+                font-size: 24px !important;
+                font-weight: 900 !important;
+                color: #10b981 !important;
+                line-height: 1 !important;
+                direction: ltr !important; /* چپ‌چین برای قرارگیری صحیح پلاس */
+            }
+
+            .single-fun-fact h3 .odometer {
+                font-family: sans-serif !important;
+                letter-spacing: -1px !important;
+                color: #064e3b !important;
+            }
+
+            /* --- بخش 5: تنظیم دقیق دایره و وسط‌چین کردن پلاس (+) --- */
+            .single-fun-fact h3 .sign-icon {
+                /* جابجایی به سمت چپ */
+                order: -1 !important;
+
+                /* ابعاد دایره */
+                width: 26px; /* کمی بزرگتر برای فضای بهتر */
+                height: 26px;
+                background-color: #d1fae5;
+                color: #059669;
+                border-radius: 50%;
+
+                /* تکنیک وسط‌چین کردن دقیق */
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+
+                /* فونت و سایز */
+                font-family: Arial, Helvetica, sans-serif !important; /* فونت استاندارد برای وسط‌چین بهتر */
+                font-size: 18px !important;
+                font-weight: 400 !important; /* وزن نرمال معمولاً تمیزتر از بولد دیده می‌شود */
+                line-height: 1 !important;
+
+                /* تنظیم موقعیت */
+                margin-right: 8px !important;
+                margin-left: 0 !important;
+
+                /* اصلاح ریز چشمی (برای اینکه دقیقاً وسط دیده شود) */
+                padding-top: 1px !important;
+            }
+
+            /* متن پایین */
+            .single-fun-fact p {
+                font-size: 13px !important;
+                font-weight: bold !important;
+                color: #374151 !important;
+                margin: 0 !important;
+                border-top: 1px dashed #e5e7eb;
+                padding-top: 10px;
+                width: 100%;
+                margin-top: 5px !important;
+            }
+        }
+    </style>
+
+    <style>
+        /* --- استایل‌های دراپ‌داون موبایل --- */
+        .mobile-cat-dropdown {
+            display: none; /* در حالت پیش‌فرض مخفی است */
+            position: relative;
+            width: 100%;
+            margin-bottom: 25px;
+            font-family: inherit;
+            z-index: 100;
+        }
+
+        /* نمایش فقط در موبایل و تبلت (زیر 991 پیکسل) */
+        @media (max-width: 991px) {
+            .shop-list-tab .tabs {
+                display: none !important; /* مخفی کردن تب‌های قدیمی */
+            }
+
+            .mobile-cat-dropdown {
+                display: block; /* نمایش دراپ‌داون جدید */
+            }
+        }
+
+        /* استایل دکمه اصلی (هدر) */
+        .mobile-cat-dropdown .dropdown-header {
+            background: #ffffff;
+            border: 1px solid #eee;
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* سایه نرم */
+            transition: all 0.3s ease;
+        }
+
+        .mobile-cat-dropdown .dropdown-header:active {
+            background-color: #fafafa;
+        }
+
+        .mobile-cat-dropdown .selected-text {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .mobile-cat-dropdown .arrow-icon {
+            color: #23a61e; /* رنگ سبز برند */
+            font-size: 14px;
+            transition: transform 0.3s;
+        }
+
+        /* چرخش فلش وقتی منو باز است */
+        .mobile-cat-dropdown.open .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        /* استایل لیست بازشونده */
+        .mobile-cat-dropdown .dropdown-options {
+            display: none; /* مخفی در حالت بسته */
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            padding: 0;
+            list-style: none;
+            border: 1px solid #eee;
+            overflow: hidden;
+            animation: fadeInDown 0.3s ease;
+        }
+
+        .mobile-cat-dropdown.open .dropdown-options {
+            display: block; /* نمایش وقتی کلاس open اضافه شود */
+        }
+
+        /* استایل آیتم‌های داخل لیست */
+        .mobile-cat-dropdown .option-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            color: #555;
+            transition: background 0.2s;
+        }
+
+        .mobile-cat-dropdown .option-item:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-cat-dropdown .option-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* استایل آیتم انتخاب شده */
+        .mobile-cat-dropdown .option-item.active {
+            background-color: #f0fdf0; /* سبز خیلی روشن */
+            color: #23a61e;
+            font-weight: bold;
+        }
+
+        /* آیکون تیک سبز */
+        .mobile-cat-dropdown .check-icon {
+            display: none;
+            color: #23a61e;
+        }
+
+        .mobile-cat-dropdown .option-item.active .check-icon {
+            display: block; /* نمایش تیک فقط برای آیتم فعال */
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- استایل اسکرول افقی محصولات در موبایل --- */
+        @media (max-width: 991px) {
+            /* تنظیم کانتینر برای اسکرول افقی */
+            .mobile-scroll-row {
+                display: flex !important;
+                flex-wrap: nowrap !important; /* جلوگیری از شکستن خط */
+                overflow-x: auto !important; /* فعال کردن اسکرول */
+                overflow-y: hidden;
+                gap: 10px; /* فاصله بین کارت‌ها */
+                padding-bottom: 20px; /* فضا برای سایه پایین کارت‌ها */
+                scrollbar-width: none; /* مخفی کردن اسکرول بار در فایرفاکس */
+                -webkit-overflow-scrolling: touch; /* نرم کردن اسکرول */
+            }
+
+            /* مخفی کردن اسکرول بار در کروم/سافاری */
+            .mobile-scroll-row::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* تنظیم اندازه هر کارت محصول */
+            .mobile-scroll-row > div[class*="col-"] {
+                flex: 0 0 160px; /* عرض ثابت کارت: ۱۶۰ پیکسل */
+                max-width: 160px;
+                width: 160px;
+                padding: 0 5px; /* فاصله داخلی */
+            }
+
+            /* کوچک کردن تصویر محصول متناسب با کارت */
+            .mobile-scroll-row .shop-image {
+                height: 130px !important; /* ارتفاع تصویر کمتر شود */
+                margin-bottom: 10px;
+            }
+
+            /* کوچک کردن فونت‌ها برای موبایل */
+            .mobile-scroll-row .shop-content {
+                padding: 10px;
+            }
+
+            .mobile-scroll-row .shop-content h3 a {
+                font-size: 13px; /* فونت عنوان کوچک‌تر */
+                line-height: 1.4;
+                height: 38px; /* محدود کردن ارتفاع متن به ۲ خط */
+                overflow: hidden;
+                display: block;
+            }
+
+            .mobile-scroll-row .shop-content span {
+                font-size: 13px;
+            }
+
+            /* تنظیم دکمه افزودن به سبد خرید */
+            .mobile-scroll-row .shop-icon .big-icon a {
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 14px;
+            }
+        }
+
+
+    </style>
+
+
+</head>
+
+<body>
+
+
+<!-- Start Navbar Area -->
+<div class="navbar-area navbar-style-two">
+    <div class="trifles-responsive-nav">
+        <div class="container">
+            <div class="trifles-responsive-menu">
+                <div class="logo">
+                    <a href="{% url 'index' %}">
+                        <img src="{% static "img/logo-two.png" %}" alt="logo">
+                    </a>
+                </div>
+                <!-- Mobile Icons - سمت چپ -->
+                <div class="mobile-icons">
+                    <div class="option-item">
+                        <i class="search-btn fa fa-search"></i>
+                        <i class="close-btn fa fa-times" style="display: none;"></i>
+                        <div class="search-overlay search-popup">
+                            <div class='search-box'>
+                                <form class="search-form" action="{% url 'searched_product_list' %}">
+                                    <input class="search-input" name="search" placeholder="جستجو" type="text">
+                                    <button class="search-button" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-btn">
+                        <a href="{% url 'cart_detail' %}">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span>{{ cart.cart_len }}</span>
+                        </a>
+                    </div>
+                    <div class="mobile-menu-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Menu -->
+            <div class="mobile-nav-menu">
+                <ul>
+                    <li><a href="{% url 'index' %}" {% if request.path == '/' %}class="active"{% endif %}>خانه</a></li>
+                    <li><a href="{% url 'services' %}">خدمات</a></li>
+                    <li><a href="{% url 'faq' %}">سوالات متداول</a></li>
+                    <li><a href="{% url 'product_list' %}">فروشگاه</a></li>
+                    <li><a href="{% url 'blog_posts_list' %}">بلاگ</a></li>
+                    <li><a href="{% url 'contact_us' %}">تماس با ما</a></li>
+                    {% if user.is_authenticated %}
+                        <li>
+                            {% if user.customer %}
+                                <a>خوش آمدید! {{ user.customer.first_name }}</a>
+                            {% else %}
+                                <a>خوش آمدید! {{ user.mobile }}</a>
+                            {% endif %}
+                        </li>
+                        <li><a href="{% url 'order_history' %}"><i class="fa fa-history ml-2"></i> تاریخچه سفارشات</a>
+                        </li>
+                        <li>
+                            <form action="{% url 'accounts:logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link nav-link">
+                                    خروج <i class="fa fa-sign-out-alt"></i>
+                                </button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'accounts:login' %}">ورود <i class="fa fa-sign-in-alt"></i> /ثبت نام <i
+                                class="fa fa-user-plus"></i></a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="trifles-nav">
+        <div class="container">
+            <nav class="navbar navbar-expand-md navbar-light">
+                <a class="navbar-brand" href="{% url 'index' %}">
+                    <img src="{% static 'img/small text.svg' %}" alt="logo" style="width: 280px !important;">
+                </a>
+
+                <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                    <ul class="navbar-nav" style="margin-right: 44px">
+                        <li class="nav-item">
+                            <a href="{% url 'index' %}" class="nav-link active">
+                                خانه
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'services' %}" class="nav-link">
+                                خدمات
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'faq' %}" class="nav-link">
+                                سوالات متداول
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'product_list' %}" class="nav-link">
+                                فروشگاه
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'blog_posts_list' %}" class="nav-link">
+                                بلاگ
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'contact_us' %}" class="nav-link">
+                                تماس با ما
+                            </a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a href="" class="nav-link">
+                                    {% if user.customer %}
+                                        خوش آمدید! {{ user.customer.first_name }}
+                                    {% else %}
+                                        خوش آمدید! {{ user.mobile }}
+                                    {% endif %}
+                                    <i class="fa fa-chevron-down"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a href="{% url 'order_history' %}" class="nav-link">
+                                            <i class="fa fa-history ml-2"></i>
+                                            تاریخچه سفارشات
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <form action="{% url 'accounts:logout' %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-link nav-link">
+                                                    خروج
+                                                    <i class="fa fa-sign-out-alt"></i>
+                                                </button>
+                                            </form>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'accounts:login' %}" class="nav-link">
+                                    ورود
+                                    <i class="fa fa-sign-in-alt"></i>
+                                    /ثبت نام
+                                    <i class="fa fa-user-plus"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+
+                    <div class="others-options">
+                        <div class="option-item"><i class="search-btn fa fa-search"></i>
+                            <i class="close-btn fa fa-times"></i>
+                            <div class="search-overlay search-popup">
+                                <div class='search-box'>
+                                    <form class="search-form" action="{% url 'searched_product_list' %}">
+                                        <input class="search-input" name="search" placeholder="جستجو" type="text">
+                                        <button class="search-button" type="submit">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cart-btn">
+                            <a href="{% url 'cart_detail' %}">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>{{ cart.cart_len }}</span>
+                            </a>
+                        </div>
+                        <!-- حذف دکمه برگر منو قبلی -->
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- End Navbar Area -->
+
+
+<!-- Start Home Banner Two Area -->
+<div class="home-banner-two">
+    <div class="home-slides owl-carousel owl-theme">
+        <div class="home-item item-bg1">
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="container">
+                        <div class="main-banner-content">
+                            <h1>فروشگاه کشت آذر پاسارگاد</h1>
+                            <p> عرضه کننده انواع کود و سم با 20 سال سابقه، مطمئن و با سریعترین ارسال</p>
+
+                            <div class="banner-btn">
+                                <a href="{% url 'services' %}" class="default-btn">
+                                    درباره ما
+                                    <i class="flaticon-plus"></i>
+                                    <span></span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="home-item item-bg2">
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="container">
+                        <div class="main-banner-content">
+
+
+                            <h1>فروشگاه کشت آذر پاسارگاد</h1>
+                            <p> عرضه کننده انواع کود و سم با 20 سال سابقه، مطمئن و با سریعترین ارسال</p>
+
+
+                            <div class="banner-btn">
+                                <a href="{% url 'services' %}" class="default-btn">
+                                    درباره ما
+                                    <i class="flaticon-plus"></i>
+                                    <span></span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="home-item item-bg3">
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="container">
+                        <div class="main-banner-content">
+
+                            <h1>فروشگاه کشت آذر پاسارگاد</h1>
+                            <p> عرضه کننده انواع کود و سم با 20 سال سابقه، مطمئن و با سریعترین ارسال</p>
+
+
+                            <div class="banner-btn">
+                                <a href="{% url 'services' %}" class="default-btn">
+                                    درباره ما
+                                    <i class="flaticon-plus"></i>
+                                    <span></span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="creative-shape">
+        <img src="{% static 'img/home-two/shape.png' %}" alt="image">
+    </div>
+
+    <div class="shape-img1">
+        <img src="{% static 'img/home-two/shape-1.png' %}" alt="image">
+    </div>
+
+    <div class="shape-img2">
+        <img src="{% static 'img/home-two/shape-2.png' %}" alt="image">
+    </div>
+</div>
+<!-- End Home Banner Two Area -->
+
+<!-- Start Fun Facts Section -->
+<section class="fun-facts-area pb-100">
+    <div class="container">
+        <div class="fun-facts-content-area fun-facts-top">
+            <div class="row align-items-center">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-fun-fact">
+                        <h3>
+                            <span style="direction: ltr;" class="odometer" data-count="120">00</span>
+                            <span class="sign-icon">+</span>
+                        </h3>
+                        <p>محصولات</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-fun-fact">
+                        <h3>
+                            <span style="direction: ltr;" class="odometer" data-count="150">00</span>
+                            <span class="sign-icon">+</span>
+                        </h3>
+                        <p>سفارشات</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-fun-fact">
+                        <h3>
+                            <span style="direction: ltr;" class="odometer" data-count="145">00</span>
+                            <span class="sign-icon">+</span>
+                        </h3>
+                        <p>مقالات</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-fun-fact">
+                        <h3>
+                            <span style="direction: ltr;" class="odometer" data-count="200">00</span>
+                            <span class="sign-icon">+</span>
+                        </h3>
+                        <p>مشتریان</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Fun Facts Section -->
+
+<!-- Start Shop Section -->
+<!-- Start Shop Section -->
+<!-- Start Shop Section -->
+<!-- Start Shop Section -->
+<section class="shop-section pb-100">
+    <div class="container">
+        <div class="section-title">
+            <span>به فروشگاه ما مراجعه کنید</span>
+            <h3>محصولات ما را بخرید</h3>
+            <p>ما افتخار داریم که نماینده رسمی برندهای معتبر داخلی و خارجی در زمینه تولید سموم و کودهای کشاورزی
+                هستیم.</p>
+        </div>
+
+        <!-- Start Messages Area -->
+        {% if messages %}
+            <div class="messages-area py-3">
+                <div class="container">
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {% if message.tags == 'error' or message.tags == 'danger' %}
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                {% elif message.tags == 'success' %}
+                                    <i class="fas fa-check-circle me-2"></i>
+                                {% elif message.tags == 'warning' %}
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                {% else %}
+                                    <i class="fas fa-info-circle me-2"></i>
+                                {% endif %}
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <!-- End Messages Area -->
+
+        <div class="tab shop-list-tab">
+
+            <!-- Mobile Category Dropdown Start -->
+            <div class="mobile-cat-dropdown">
+                <div class="dropdown-header">
+                    <span class="selected-text">همه محصولات</span>
+                    <i class="fas fa-chevron-down arrow-icon"></i>
+                </div>
+                <ul class="dropdown-options">
+                    <li class="option-item active" data-index="0">
+                        <span>همه محصولات</span>
+                        <i class="fas fa-check check-icon"></i>
+                    </li>
+                    {% for cat in category_list_i %}
+                        <li class="option-item" data-index="{{ forloop.counter }}">
+                            <span>{{ cat.title }}</span>
+                            <i class="fas fa-check check-icon"></i>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- Mobile Category Dropdown End -->
+
+            <!-- Desktop Tabs -->
+            <ul class="tabs">
+                <li><a href="#">همه محصولات</a></li>
+                {% for cat in category_list_i %}
+                    <li><a href="#">{{ cat.title }}</a></li>
+                {% endfor %}
+            </ul>
+
+            <div class="tab_content">
+                <!-- Tab: All Products -->
+                <div class="tabs_item">
+                    <!-- Added class 'mobile-scroll-row' here -->
+                    <div class="row align-items-center mobile-scroll-row">
+                        {% for product in all_products %}
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="shop-item-two">
+                                    <div class="shop-image">
+                                        <img src="
+                                                
+                                                
+                                                
+                                                
+                                                {% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no-image-14597.png' %}{% endif %}"
+                                             alt="{{ product.name }}">
+                                    </div>
+
+                                    <div class="shop-content">
+                                        <h3><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
+                                        <p>
+                                            {% with rating=product_ratings|get_item:product.id|default:0|add:0 %}
+                                                {% for i in '12345' %}
+                                                    {% if rating >= forloop.counter %}
+                                                        <i class="fas fa-star" style="color: gold;"></i>
+                                                    {% else %}
+                                                        <i class="far fa-star" style="color: gold;"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endwith %}
+                                        </p>
+                                        {% if product.is_available %}
+                                            <p style="color: green; font-size: 12px;"><i
+                                                    class="fas fa-shopping-cart"></i> موجود</p>
+                                            <span>{{ product.unit_price|comma_separator }} تومان</span>
+                                        {% else %}
+                                            <p style="color: red; font-size: 12px;"><i
+                                                    class="fas fa-times red-cross"></i> ناموجود</p>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if product.is_available %}
+                                        <form id="index_form_{{ product.id }}" method="post"
+                                              action="{% url 'add_to_cart' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                                            <input type="hidden" name="update1" value='0'>
+                                            <input type="hidden" name="quantity" value='1'>
+                                            <ul class="shop-icon">
+                                                <li class="big-icon">
+                                                    <a href="#"
+                                                       onclick="document.getElementById('index_form_{{ product.id }}').submit(); return false;">
+                                                        <i class="flaticon-plus"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="product-btn">
+                        <a href="{% url 'product_list' %}" class="product-btn-one">سایر محصولات <i
+                                class="flaticon-plus"></i></a>
+                    </div>
+                </div>
+
+                <!-- Tabs: Categories -->
+                {% for cat in category_list_i %}
+                    <div class="tabs_item">
+                        <!-- Added class 'mobile-scroll-row' here too -->
+                        <div class="row align-items-center mobile-scroll-row">
+                            {% for product in cat.limited_products %}
+                                <div class="col-lg-3 col-md-6 col-sm-6">
+                                    <div class="shop-item-two">
+                                        <div class="shop-image">
+                                            <img src="
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    {% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no-image-14597.png' %}{% endif %}"
+                                                 alt="{{ product.name }}">
+                                        </div>
+
+                                        <div class="shop-content">
+                                            <h3><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
+                                            <p>
+                                                {% with rating=product_ratings|get_item:product.id|default:0|add:0 %}
+                                                    {% for i in '12345' %}
+                                                        {% if rating >= forloop.counter %}
+                                                            <i class="fas fa-star" style="color: gold;"></i>
+                                                        {% else %}
+                                                            <i class="far fa-star" style="color: gold;"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endwith %}
+                                            </p>
+                                            {% if product.is_available %}
+                                                <p style="color: green; font-size: 12px;"><i
+                                                        class="fas fa-shopping-cart"></i> موجود</p>
+                                                <span>{{ product.unit_price|comma_separator }} تومان</span>
+                                            {% else %}
+                                                <p style="color: red; font-size: 12px;"><i
+                                                        class="fas fa-times red-cross"></i> ناموجود</p>
+                                            {% endif %}
+                                        </div>
+
+                                        {% if product.is_available %}
+                                            <form id="index_form_{{ product.id }}" method="post"
+                                                  action="{% url 'add_to_cart' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                <input type="hidden" name="update1" value='0'>
+                                                <input type="hidden" name="quantity" value='1'>
+                                                <ul class="shop-icon">
+                                                    <li class="big-icon">
+                                                        <a href="#"
+                                                           onclick="document.getElementById('index_form_{{ product.id }}').submit(); return false;">
+                                                            <i class="flaticon-plus"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="product-btn">
+                            <a href="{% url 'product_list' %}" class="product-btn-one">سایر محصولات <i
+                                    class="flaticon-plus"></i></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Shop Section -->
+
+<!-- End Shop Section -->
+
+<!-- End Shop Section -->
+
+<!-- End Shop Section -->
+
+<!-- Start Partner Area -->
+<div class="partner-area ptb-100">
+    <div class="container">
+        <div class="partner-slider owl-carousel owl-theme">
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/1.png' %}" alt="partner">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/2.png' %}" alt="partner">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/3.png' %}" alt="partner">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/4.png' %}" alt="partner">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/5.png' %}" alt="partner">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/6.png' %}" alt="partner">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/7.png' %}" alt="partner">
+                </a>
+            </div>
+
+            <div class="partner-item">
+                <a href="#">
+                    <img src="{% static 'img/partner/8.png' %}" alt="partner">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="partner-shape">
+        <img src="{% static 'img/partner/shape.png' %}" alt="main-image">
+    </div>
+    <div class="partner-shape-img1">
+        <img src="{% static 'img/partner/shape-2.png' %}" alt="image">
+    </div>
+
+    <div class="default-shape">
+        <div class="default-shape-one">
+            <img src="{% static 'img/default-shape/shape.png' %}" alt="image">
+        </div>
+
+        <div class="default-shape-two">
+            <img src="{% static 'img/default-shape/shape-2.png' %}" alt="image">
+        </div>
+    </div>
+</div>
+<!-- End Partner Area-->
+
+
+<!-- Start Faq Section-->
+<section class="faq-section ptb-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="faq-content">
+                    <span>سوالات متداول</span>
+                    <h3>سوالات متداولی که اغلب مشتریان از ما می پرسند</h3>
+
+                    <div class="faq-btn">
+                        <a href="{% url 'faq' %}" class="default-btn">
+                            سوالات بیشتر
+                            <i class="flaticon-plus"></i>
+                            <span></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="faq-accordion">
+                    <ul class="accordion">
+                        {% for faq in faqs %}
+                            <li class="accordion-item">
+                                <a class="accordion-title active" href="javascript:void(0)">
+                                    <i class="flaticon-plus"></i>
+                                    {{ faq.question }}
+                                </a>
+                                <p class="accordion-content show">
+                                    {{ faq.answer }}
+                                </p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="default-shape">
+        <div class="default-shape-one">
+            <img src="{% static 'img/default-shape/shape.png' %}" alt="image">
+        </div>
+
+        <div class="default-shape-two">
+            <img src="{% static 'img/default-shape/shape-2.png' %}" alt="image">
+        </div>
+    </div>
+</section>
+<!-- End Faq Section-->
+
+<!-- Start Summary Section -->
+<section class="summary-section ptb-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="summary-content default-summary">
+                    <span>خلاصه</span>
+                    <h3>آنچه ما از چگونگی برداشت محصولات به شما کمک می کنیم</h3>
+
+                    <p>با تکیه بر سال‌ها تجربه و دانش فنی، تیم ما آماده ارائه مشاوره تخصصی در زمینه کشت زراعی و باغی
+                        است.
+
+                        کارشناسان ما با بررسی شرایط زمین و آب و هوا، بهترین راهکارها را برای افزایش محصول و بهره‌وری
+                        ارائه می‌دهند. همچنین در خصوص انتخاب محصول مناسب با شرایط اقلیمی منطقه شما مشاوره می‌دهیم.
+                    </p>
+
+                    <div class="summary-btn">
+                        <a class="optional-btn" href="{% url 'services' %}">
+                            خدمات
+                            <i class="flaticon-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="summary-image">
+                    <img src="{% static 'img/summary/1.png' %}" alt="image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="summary-shape-image-two">
+        <img src="{% static 'img/summary/shape2.png' %}" alt="image">
+    </div>
+</section>
+<!-- End Summary Section -->
+
+<!-- Start Services Section -->
+<section class="services-section pb-100">
+    <div class="container">
+        <div class="services-content-area">
+            <div class="services-slider owl-carousel owl-theme">
+
+                <div class="services-item">
+                    <div class="icon">
+                        <i class="flaticon-shipping-and-delivery"></i>
+                        <h3>
+                            <a href="#">
+                                تحویل سریع
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="services-item">
+                    <div class="icon">
+                        <i class="flaticon-vendor"></i>
+                        <h3>
+                            <a href="#">
+                                انواع سموم و کود های کشاورزی
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="services-item">
+                    <div class="icon">
+                        <i class="flaticon-harvest"></i>
+                        <h3>
+                            <a href="#">
+                                ملزومات کشاورزی
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="services-item">
+                    <div class="icon">
+                        <i class="flaticon-mission-accomplished"></i>
+                        <h3>
+                            <a href="#">
+                                استفاده از زمین
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Services Section -->
+
+
+<!-- Start Blog Section -->
+<section class="blog-section pt-100 pb-70">
+    <div class="container">
+        <div class="section-title">
+            <span>وبلاگ ما</span>
+            <h3>مقالات </h3>
+            <p>با ما بروز باشید </p>
+            <p>برخی از مقالات روز دنیا در مورد سموم و کود های کشاورزی </p>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="single-blog-item-two">
+                    <div class="blog-image">
+                        <img src="{{ blog1.image.url }}" alt="image">
+                    </div>
+
+                    <div class="blog-content">
+                        <span>{{ blog1.date_posted|to_jalali:'%Y/%m/%d' }}،{{ blog1.category }}</span>
+
+                        <h3>{{ blog1.title }}</h3>
+                        <p>{{ blog1.text|truncatewords:10 }}</p>
+
+                        <div class="blog-btn">
+                            <a href="{{ blog1.get_absolute_url }}" class="blog-btn-one">
+                                بیشتر بدانید
+                                <i class="flaticon-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="single-blog-item-two">
+                    <div class="blog-image">
+                        <img src="{{ blog2.image.url }}" alt="image">
+                    </div>
+
+                    <div class="blog-content">
+                        <span>{{ blog2.date_posted|to_jalali:'%Y/%m/%d' }}،{{ blog2.category }}</span>
+
+                        <h3>{{ blog2.title }}</h3>
+                        <p>{{ blog2.text|truncatewords:10 }}</p>
+
+                        <div class="blog-btn">
+                            <a href="{{ blog2.get_absolute_url }}" class="blog-btn-one">
+                                بیشتر بدانید
+                                <i class="flaticon-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 offset-lg-0 offset-md-3">
+                <div class="single-blog-item-two">
+                    <div class="blog-image">
+                        <img src="{{ blog3.image.url }}" alt="image">
+                    </div>
+
+                    <div class="blog-content">
+                        <span>{{ blog3.date_posted|to_jalali:'%Y/%m/%d' }}،{{ blog3.category }}</span>
+
+                        <h3>{{ blog3.title }}</h3>
+                        <p>{{ blog3.text|truncatewords:10 }}</p>
+
+                        <div class="blog-btn">
+                            <a href="{{ blog3.get_absolute_url }}" class="blog-btn-one">
+                                بیشتر بدانید
+                                <i class="flaticon-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+<!-- End Blog Section -->
+
+<!-- Start Footer Area -->
+<footer class="footer-area">
+    <div class="container">
+        <div class="footer-widgets d-flex flex-nowrap justify-content-between align-items-start">
+
+            <!-- Trust Badges: اینماد بالا، سپ پایین -->
+            <div class="single-footer-widget trusts trust-vertical">
+                <!-- ۱) اینماد -->
+                <a referrerpolicy="origin" target="_blank"
+                   href="https://trustseal.enamad.ir/?id=594102&Code=N2r76S4AsGxTxreYFkBcVs7zCazKjf6r"
+                   class="trust-item">
+                    <img referrerpolicy="origin"
+                         src="https://trustseal.enamad.ir/logo.aspx?id=594102&Code=N2r76S4AsGxTxreYFkBcVs7zCazKjf6r"
+                         alt="نماد اعتماد الکترونیکی"
+                         class="img-fluid">
+                </a>
+                <!-- ۲) سپ -->
+                <a href="https://sep.ir/" target="_blank" class="trust-item">
+                    <img src="{% static 'img/logo_sep.jpg' %}"
+                         alt="درگاه پرداخت سپ">
+                </a>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="single-footer-widget contact-widget">
+                <h3>اطلاعات تماس</h3>
+                <p><i class="fas fa-map-marker-alt"></i>
+                    خیابان حافظ شرقی نبش فرعی34، اصفهان ، شهرضا
+                </p>
+                <p><i class="fas fa-phone"></i>
+                    <a href="tel:03153544206">031-53544206</a>
+                </p>
+                <p><i class="far fa-envelope"></i>
+                    <a href="mailto:azar_pasarghad@yahoo.com">azar_pasarghad@yahoo.com</a>
+                </p>
+            </div>
+
+            <!-- Support Links -->
+            <div class="single-footer-widget support-widget">
+                <h3>پشتیبانی ما</h3>
+                <ul class="footer-services-list">
+                    <li><a href="{% url 'product_list' %}">محصولات</a></li>
+                    <li><a href="{% url 'terms_condition' %}">قوانین و مقررات</a></li>
+                    <li><a href="{% url 'faq' %}">سوالات متداول</a></li>
+                    <li><a href="{% url 'contact_us' %}">با ما تماس بگیرید</a></li>
+                    <li><a href="{% url 'accounts:login' %}">حساب کاربری من</a></li>
+                </ul>
+            </div>
+
+        </div> <!-- /.footer-widgets -->
+    </div>
+
+    <!-- Copyright Area -->
+    <div class="copyright-area py-3 mt-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0">تمامی حقوق متعلق به فروشگاه کشت آذر پاسارگاد می‌باشد.</p>
+                    <p>(طراحی و ساخت شرکت سامین وب :09913928400)</p>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <ul class="d-flex justify-content-center justify-content-md-end list-unstyled mb-0">
+                        <li class="me-3"><a href="{% url 'terms_condition' %}" class="footer-link">قوانین و مقررات</a>
+                        </li>
+                        <li><a href="{% url 'terms_condition' %}" class="footer-link">حریم خصوصی</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer Area -->
+
+<style>
+    /* Footer Styles */
+    .footer-area {
+        background: #22272b;
+        color: #fff;
+        font-family: 'Vazirmatn', 'IRANSans', Tahoma, Arial, sans-serif;
+        direction: rtl;
+        padding-top: 28px;
+        font-size: 1rem;
+    }
+
+    .footer-area .single-footer-widget {
+        padding: 10px 16px;
+    }
+
+    .footer-area .logo img {
+        max-width: 140px;
+        margin-bottom: 18px;
+    }
+
+    .footer-area .trusts .row {
+        justify-content: flex-start;
+        align-items: center;
+        margin-right: 0; /* در صورت استفاده از bootstrap */
+        margin-left: 0;
+    }
+
+    .footer-area .trusts .col-6 {
+        text-align: right;
+        padding: 3px 8px;
+    }
+
+    .footer-area .trusts img {
+        max-width: 84px;
+        border-radius: 7px;
+        background: #fefefe;
+        border: 1px solid #ffffff;
+        transition: box-shadow 0.20s;
+        box-shadow: 0 2px 8px rgb(255, 255, 255);
+    }
+
+    .footer-area .trusts img:hover {
+        box-shadow: 0 4px 18px #ffffff;
+    }
+
+    .footer-area h3 {
+        color: #23a61e;
+        font-size: 1.15rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .footer-area .footer-services-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-area .footer-services-list li {
+        margin-bottom: 9px;
+    }
+
+    .footer-link {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+        color: #23a61e;
+        text-decoration: underline;
+    }
+
+    .footer-area .footer-contact-link {
+        color: #ffffff;
+        word-break: break-all;
+    }
+
+    .footer-area .contact-info i {
+        color: #23a61e;
+        min-width: 20px;
+        font-size: 1.13em;
+        margin-left: 8px;
+    }
+
+    .footer-area .contact-info p {
+        margin-bottom: 13px;
+        font-size: 1rem;
+    }
+
+    .footer-area .contact-info span,
+    .footer-area .contact-info a {
+        vertical-align: middle;
+    }
+
+    .footer-area .trusts.trust-vertical {
+        display: flex;
+        flex-direction: column; /* ستون وار */
+        align-items: center; /* وسط‌چین‌سازی لوگوها */
+        gap: 0.5rem; /* فاصله بین لوگوها */
+        /* اگر خواستید می‌توانید margin-top/margin-bottom هم اضافه کنید */
+    }
+
+    .footer-area .contact-info span {
+        color: #fff !important;
+    }
+
+    /* Wrapper فلکس‌بیس فوتر */
+    .footer-area .footer-widgets {
+        display: flex;
+        flex-wrap: nowrap; /* هیچ‌گاه نمی‌شکند */
+        justify-content: space-between; /* فضا بین ستون‌ها */
+        align-items: flex-start; /* هم‌ترازی از بالا */
+        gap: 2rem; /* فاصله‌ی ستون‌ها */
+        padding-bottom: 2rem;
+    }
+
+    /* هر ویجت اجازه‌ی Shrink دارد */
+    .footer-area .footer-widgets .single-footer-widget {
+        flex: 0 1 auto;
+        min-width: 180px; /* حداقل عرض (اختیاری) */
+    }
+
+    /* استایل Trust Badges */
+    .footer-area .trusts {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .footer-area .trusts .trust-item img {
+        max-width: 100px;
+        height: auto;
+    }
+
+    /* عناوین ویجت */
+    .footer-area .single-footer-widget h3 {
+        font-size: 18px;
+        margin-bottom: 1rem;
+        color: #23a61e;
+    }
+
+    /* لینک‌های پشتیبانی */
+    .footer-area .support-widget .footer-services-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-area .support-widget .footer-services-list li {
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-area .support-widget .footer-services-list li a {
+        color: #ffffff;
+        text-decoration: none;
+        transition: color .3s;
+    }
+
+    .footer-area .support-widget .footer-services-list li a:hover {
+        color: #23a61e;
+    }
+
+
+    /* اطلاعات تماس */
+    .footer-area .contact-widget p,
+    .footer-area .contact-widget a {
+        color: #ffffff;
+        font-size: 15px;
+        text-decoration: none;
+    }
+
+    .footer-area .contact-widget i {
+        color: #23a61e;
+        margin-left: 0.5rem;
+    }
+
+    /* واکنش‌گرایی */
+    @media (max-width: 768px) {
+        .footer-area .footer-widgets {
+            gap: 1rem;
+        }
+
+        .footer-area .footer-widgets .single-footer-widget {
+            min-width: 140px;
+        }
+
+        .footer-area .trusts .trust-item img {
+            max-width: 80px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .footer-area .footer-widgets {
+            gap: 0.5rem;
+        }
+
+        .footer-area .footer-widgets .single-footer-widget {
+            min-width: 120px;
+        }
+
+        .footer-area .trusts .trust-item img {
+            max-width: 60px;
+        }
+
+        .footer-area .support-widget .footer-services-list li {
+            font-size: 14px;
+        }
+    }
+
+
+    .copyright-area {
+        background: #191d21;
+        color: #ffffff;
+        font-size: 0.99rem;
+    }
+
+    .copyright-area p {
+        margin-bottom: 0;
+    }
+
+    .copyright-area ul {
+        padding: 0;
+        margin: 0;
+    }
+
+    .copyright-area li {
+        display: inline-block;
+        margin-right: 14px;
+        margin-left: 0;
+        font-size: .98em;
+    }
+
+    .copyright-area li:last-child {
+        margin-right: 0;
+    }
+
+    .copyright-area a {
+        color: #23a61e;
+        text-decoration: none;
+        padding: 0 3px;
+        transition: color .22s;
+    }
+
+    .copyright-area a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    /* ریسپانسیو حرفه‌ای */
+    @media (max-width: 991.98px) {
+        .footer-area .row > div {
+            text-align: center !important;
+        }
+
+        .footer-area .logo img {
+            margin: auto;
+            max-width: 120px;
+        }
+
+        .footer-area .single-footer-widget {
+            padding: 7px 0 16px 0;
+        }
+
+        .footer-area h3 {
+            font-size: 1.07rem;
+            margin-bottom: 14px;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .footer-area {
+            font-size: 0.98rem;
+        }
+
+        .footer-area .logo img {
+            max-width: 108px;
+        }
+
+        .copyright-area {
+            font-size: 0.92rem;
+            padding: 11px 0;
+        }
+
+        .copyright-area .row {
+            flex-direction: column;
+        }
+
+        .copyright-area [class^="col-"] {
+            text-align: center !important;
+            margin-bottom: 9px;
+        }
+
+        .copyright-area ul {
+            justify-content: center !important;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .footer-area {
+            padding: 12px 0 0 0;
+        }
+
+        .footer-area .single-footer-widget {
+            padding: 0 0 13px 0;
+        }
+
+        .footer-area .logo img {
+            max-width: 85px;
+        }
+
+        .footer-area h3 {
+            font-size: 0.96rem;
+            margin-bottom: 10px;
+        }
+
+        .footer-area .trusts img {
+            max-width: 72px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+
+        /* —— ۱) با position:relative و left —— */
+        .footer-area .trusts {
+            position: relative !important;
+            left: 20px !important; /* شیفت ۲۰px به سمت راست */
+        }
+    }
+
+    .footer-area .trusts {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        /* اگر می‌خواهی کمی فاصله‌ی عمودی بیشتر باشد: margin-bottom: 0.5rem; */
+    }
+
+    /* اندازه‌ی لوگوها را در حالت کلی کنترل کن */
+    .footer-area .trusts .trust-item img {
+        max-width: 100px; /* یا 120px بسته به طرح */
+        height: auto;
+    }
+
+    /* واکنش‌گرایی: حداکثر سایز لوگو در موبایل */
+    @media (max-width: 576px) {
+        .footer-area .trusts .trust-item img {
+            max-width: 72px !important;
+        }
+    }
+</style>
+
+<!-- Start Go Top Section -->
+<div class="go-top">
+    <i class="fas fa-chevron-up"></i>
+    <i class="fas fa-chevron-up"></i>
+</div>
+<!-- End Go Top Section -->
+
+<script src="{% static "js/jquery.min.js" %}"></script>
+
+<script src="{% static "js/popper.min.js" %}"></script>
+
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+
+<script src="{% static "js/jquery.meanmenu.js" %}"></script>
+
+<script src="{% static "js/jquery.appear.min.js" %}"></script>
+
+<script src="{% static "js/odometer.min.js" %}"></script>
+
+<script src="{% static "js/owl.carousel.min.js" %}"></script>
+
+<script src="{% static "js/jquery.magnific-popup.min.js" %}"></script>
+
+<script src="{% static "js/jquery.nice-select.min.js" %}"></script>
+
+<script src="{% static "js/imagelightbox.min.js" %}"></script>
+
+<script src="{% static "js/jquery.ajaxchimp.min.js" %}"></script>
+
+<script src="{% static "js/form-validator.min.js" %}"></script>
+
+<script src="{% static "js/contact-form-script.js" %}"></script>
+
+<script src="{% static "js/main.js" %}"></script>
+
+<script type="text/javascript">
+    !function () {
+        var i = "1dUQ6w", a = window, d = document;
+
+        function g() {
+            var g = d.createElement("script"), s = "https://www.goftino.com/widget/" + i,
+                l = localStorage.getItem("goftino_" + i);
+            g.async = !0, g.src = l ? s + "?o=" + l : s;
+            d.getElementsByTagName("head")[0].appendChild(g);
+        }
+
+        "complete" === d.readyState ? g() : a.attachEvent ? a.attachEvent("onload", g) : a.addEventListener("load", g, !1);
+    }();
+
+</script>
+
+<!-- اسکریپت برای مدیریت پیام‌ها -->
+<!-- اسکریپت برای مدیریت پیام‌ها -->
+<script>
+    // Step 1: Modify the script to store and restore active tab
+    document.addEventListener('DOMContentLoaded', function () {
+        // Store current active tab in localStorage when tab is clicked
+        var tabLinks = document.querySelectorAll('.tabs li a');
+        tabLinks.forEach(function (tabLink, index) {
+            tabLink.addEventListener('click', function () {
+                localStorage.setItem('activeTabIndex', index);
+            });
+        });
+
+        // Set active tab from localStorage on page load
+        function setActiveTabFromStorage() {
+            var activeTabIndex = localStorage.getItem('activeTabIndex');
+            if (activeTabIndex !== null) {
+                // Get all tabs
+                var tabLinks = document.querySelectorAll('.tabs li a');
+                var tabContents = document.querySelectorAll('.tab_content .tabs_item');
+
+                // Remove active class from all tabs
+                tabLinks.forEach(function (tab) {
+                    tab.parentElement.classList.remove('current');
+                });
+
+                tabContents.forEach(function (content) {
+                    content.style.display = 'none';
+                });
+
+                // Set active class to the stored tab index
+                if (tabLinks[activeTabIndex]) {
+                    tabLinks[activeTabIndex].parentElement.classList.add('current');
+                    if (tabContents[activeTabIndex]) {
+                        tabContents[activeTabIndex].style.display = 'block';
+                    }
+                }
+            }
+        }
+
+        // Call on page load
+        setActiveTabFromStorage();
+
+        // Modify form submission to include active tab info
+        var cartForms = document.querySelectorAll('form[action*="add_to_cart"]');
+        cartForms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        // Get current position and reload page
+                        var currentPosition = window.scrollY;
+                        window.location.href = window.location.pathname + '?scrollTo=' + currentPosition;
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+
+        // Same for index forms
+        var indexForms = document.querySelectorAll('form[id^="index_form_"]');
+        indexForms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        // Get current position and reload page
+                        var currentPosition = window.scrollY;
+                        window.location.href = window.location.pathname + '?scrollTo=' + currentPosition;
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+
+        // Handle auto-scroll on page load if parameter exists
+        window.addEventListener('load', function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var scrollPosition = urlParams.get('scrollTo');
+            if (scrollPosition) {
+                window.scrollTo(0, parseInt(scrollPosition));
+                // After scrolling, restore active tab
+                setActiveTabFromStorage();
+            }
+        });
+
+        // Add closing alert handlers
+        var closeButtons = document.querySelectorAll('.close-btn');
+        closeButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var alert = this.closest('.alert');
+                alert.style.opacity = '0';
+                alert.style.transition = 'opacity 0.5s';
+                setTimeout(function () {
+                    alert.style.display = 'none';
+                }, 500);
+            });
+        });
+
+        // Auto-close success alerts
+        var successAlerts = document.querySelectorAll('.alert-success');
+        successAlerts.forEach(function (alert) {
+            setTimeout(function () {
+                alert.style.opacity = '0';
+                alert.style.transition = 'opacity 1s';
+                setTimeout(function () {
+                    alert.style.display = 'none';
+                }, 1000);
+            }, 5000);
+        });
+    });
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        // Sticky Navbar Function
+        $(window).on('scroll', function () {
+            var scrolling = $(this).scrollTop();
+
+            if (scrolling > 100) {
+                $('.navbar-area').addClass('is-sticky');
+            } else {
+                $('.navbar-area').removeClass('is-sticky');
+            }
+        });
+
+        // Toggle mobile menu (اصلاح شده)
+        $('.mobile-menu-toggle').on('click', function (e) {
+            e.preventDefault(); // جلوگیری از رفتار پیش‌فرض
+            $(this).toggleClass('active');
+            $('.mobile-nav-menu').toggleClass('active');
+            console.log('منوی موبایل کلیک شد'); // برای اشکال‌زدایی
+        });
+
+        // Toggle search popup
+        $('.search-btn').on('click', function () {
+            $(this).closest('.option-item').find('.search-popup').toggleClass('active');
+            $(this).hide();
+            $(this).siblings('.close-btn').show();
+        });
+
+        $('.close-btn').on('click', function () {
+            $(this).closest('.option-item').find('.search-popup').removeClass('active');
+            $(this).hide();
+            $(this).siblings('.search-btn').show();
+        });
+
+        // بستن منو با کلیک خارج از منو
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.mobile-menu-toggle').length &&
+                !$(e.target).closest('.mobile-nav-menu').length &&
+                $('.mobile-nav-menu').hasClass('active')) {
+                $('.mobile-menu-toggle').removeClass('active');
+                $('.mobile-nav-menu').removeClass('active');
+            }
+        });
+    });
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdown = document.querySelector('.mobile-cat-dropdown');
+        const header = dropdown.querySelector('.dropdown-header');
+        const selectedText = dropdown.querySelector('.selected-text');
+        const options = dropdown.querySelectorAll('.option-item');
+        // گرفتن تب‌های اصلی که الان مخفی هستند
+        const originalTabs = document.querySelectorAll('.shop-list-tab .tabs li a');
+
+        // 1. باز و بسته کردن دراپ‌داون با کلیک
+        header.addEventListener('click', function (e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('open');
+        });
+
+        // 2. بستن دراپ‌داون اگر جای دیگری از صفحه کلیک شد
+        document.addEventListener('click', function () {
+            dropdown.classList.remove('open');
+        });
+
+        // 3. انتخاب آیتم
+        options.forEach(option => {
+            option.addEventListener('click', function () {
+                // تغییر ظاهر آیتم‌ها (فعال/غیرفعال)
+                options.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+
+                // تغییر متن هدر به متن انتخاب شده
+                const text = this.querySelector('span').innerText;
+                selectedText.innerText = text;
+
+                // پیدا کردن ایندکس (شماره) آیتم انتخاب شده
+                const index = this.getAttribute('data-index');
+
+                // *** مهم: کلیک کردن روی تب اصلی متناظر ***
+                // این کار باعث می‌شود لاجیک اصلی سایت شما برای فیلتر کردن محصولات اجرا شود
+                if (originalTabs[index]) {
+                    originalTabs[index].click();
+                }
+
+                // بستن منو
+                dropdown.classList.remove('open');
+            });
+        });
+    });
+</script>
+
+
+</body>
+
+
+</html>

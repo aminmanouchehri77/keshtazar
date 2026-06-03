@@ -1,0 +1,98 @@
+{% extends '_base.html' %}
+{% block title %}
+    خطا در پرداخت
+{% endblock %}
+{% block content %}
+    <div id="payment-error" class="container my-5">
+        <div class="card shadow-lg border-warning">
+            <div class="card-header bg-warning text-dark d-flex justify-content-center align-items-center">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <h3 class="mb-0">
+                    خطای سیستمی - فروشگاه کشت آذر پاسارگاد
+                </h3>
+            </div>
+            <div class="card-body text-center py-5">
+                <div class="error-icon mb-4">
+                    <i class="fas fa-bug fa-5x text-warning"></i>
+                    <div class="leaf-decoration">
+                        <i class="fas fa-leaf fa-2x text-warning"></i>
+                        <i class="fas fa-leaf fa-2x text-warning rotate-45"></i>
+                    </div>
+                </div>
+
+                <h4 class="text-dark mb-4">خطایی در پردازش درخواست رخ داد...</h4>
+
+                <div class="alert alert-warning w-75 mx-auto">
+                    <p class="mb-2 lead">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {{ error }}
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{% url 'contact_us' %}" class="btn btn-warning btn-lg">
+                        <i class="fas fa-headset me-2"></i>
+                        تماس با پشتیبانی
+                    </a>
+                    <a href="{% url 'index' %}" class="btn btn-outline-warning btn-lg">
+                        <i class="fas fa-home me-2"></i>
+                        بازگشت به صفحه اصلی
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* استایل حرفه‌ای برای عنوان کارت */
+        .card-header h3 {
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 700; /* ضخامت قلم */
+            font-size: 1.8rem; /* اندازه بزرگ‌تر */
+            letter-spacing: 0.5px; /* فاصلهٔ بین حروف */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* سایهٔ ملایم زیر متن */
+            margin: 0; /* حذف مارجین پیش‌فرض */
+        }
+
+        .card-header h3 {
+            /* حداقل اندازه 1.2rem، حداکثر 1.8rem و مقدار ایده‌آل 2.5vw */
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            white-space: nowrap; /* برای جلوگیری از شکست خط */
+            overflow: hidden; /* در صورت خیلی کوچک شدن، مخفی شدن اضافه */
+            text-overflow: ellipsis; /* در صورت نیاز نشان دادن ... */
+        }
+
+
+        .card-header i {
+            font-size: 1.4rem; /* کوچک‌تر کردن کمی آیکون */
+            color: #f51c1c; /* رنگ آیکون */
+        }
+    </style>
+
+    <style>
+        /* 1) متغیر CSS برای نگهداری ارتفاع نوبار */
+        :root {
+            --nav-height: 100px;
+        }
+
+        /* 2) کارت همواره زیر نوبار با فاصلهٔ ثابت 30px */
+        #payment-error {
+            margin-top: calc(var(--nav-height) + 30px) !important;
+        }
+
+    </style>
+
+    <script>
+        (function () {
+            function updateNavHeight() {
+                const nav = document.querySelector('nav.navbar.fixed-top');
+                if (!nav) return;
+                const h = nav.getBoundingClientRect().height;
+                document.documentElement.style.setProperty('--nav-height', h + 'px');
+            }
+
+            document.addEventListener('DOMContentLoaded', updateNavHeight);
+            window.addEventListener('resize', updateNavHeight);
+        })();
+    </script>
+{% endblock %}

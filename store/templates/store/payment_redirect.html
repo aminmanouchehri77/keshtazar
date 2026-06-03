@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8"/>
+    <title>در حال انتقال به درگاه پرداخت</title>
+    <style>
+        /* ریست اولیه */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .container {
+            background: #fff;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .spinner {
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 6px solid #eee;
+            border-top-color: #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* فرم مخفی تا JS اجرا شود */
+        .hidden-form {
+            display: none;
+        }
+
+        /* دکمهٔ انتقال برای حالت بدون JS */
+        noscript button {
+            margin-top: 20px;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        noscript button:hover {
+            background: #2980b9;
+        }
+
+        noscript p {
+            margin-top: 20px;
+            color: #a00;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>در حال انتقال به درگاه پرداخت</h2>
+    <div class="spinner"></div>
+    <p>لطفاً چند لحظه صبر کنید…</p>
+
+    <!-- فرم اصلی برای ارسال توکن -->
+    <form id="sep-payment-form"
+          class="hidden-form"
+          action="https://sep.shaparak.ir/OnlinePG/OnlinePG"
+          method="post">
+        <!-- مقدار {{ token }} توسط Django به‌جای اینجا قرار می‌گیرد -->
+        <input type="hidden" name="Token" value="{{ token }}">
+    </form>
+
+    <noscript>
+        <p>جاوااسکریپت غیرفعال است. برای ادامه روی دکمهٔ زیر کلیک کنید:</p>
+        <form action="https://sep.shaparak.ir/OnlinePG/OnlinePG" method="post">
+            <input type="hidden" name="Token" value="{{ token }}">
+            <button type="submit">انتقال به درگاه پرداخت</button>
+        </form>
+    </noscript>
+</div>
+
+<script>
+    window.addEventListener('load', function () {
+        var form = document.getElementById('sep-payment-form');
+        if (form) form.submit();
+    });
+</script>
+
+</body>
+</html>

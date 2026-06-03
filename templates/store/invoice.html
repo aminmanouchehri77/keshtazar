@@ -1,0 +1,103 @@
+{% load static %}{% load humanize %}{% load math_extras %}{% load shipping_extras %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>فاکتور سفارش #{{ order.id }}</title>
+    <style>
+        /* ثبت فونت فارسی */
+        @font-face {
+            font-family: 'Vazir';
+            src: url("{% static 'fonts/Vazir.ttf' %}") format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Vazir', sans-serif;
+            direction: rtl;
+        }
+
+        .company-info {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .company-info a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .company-info a:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+        }
+
+        h1, p {
+            margin: 0;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+<!-- عنوان فاکتور -->
+
+<h2>فاکتور سفارش {{ order.id }}</h2>
+
+<!-- اطلاعات شرکت -->
+
+<!-- اطلاعات سفارش -->
+<p>تاریخ: {{ order.jalali_datetime_created }}</p>
+<p>مشتری: {{ order.first_name }} {{ order.last_name }} - {{ order.mobile }}</p>
+<p>نوع ارسال:{{ order.get_shipping_type_display|strip_parentheses }}</p>
+<p>آدرس: {{ order.address }}, {{ order.city }}، {{ order.province }}</p>
+
+<!-- جدول اقلام سفارش -->
+<table>
+    <thead>
+    <tr>
+        <th>محصول</th>
+        <th>تعداد</th>
+        <th>قیمت واحد</th>
+        <th>جمع</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in order.items.all %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.unit_price|intcomma }} تومان</td>
+            <td>{{ item.quantity|mul:item.unit_price|intcomma }} تومان</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="3" style="text-align: left;"><strong>جمع کل +هزینه ارسال :</strong></td>
+        <td><strong>{{ order.total_price|intcomma }} تومان</strong></td>
+    </tr>
+    </tfoot>
+</table>
+
+<!-- فوتر صفحه (اختیاری) -->
+<div class="company-info">
+    <strong>شرکت کشت آذر پاسارگاد</strong> |
+    وب‌سایت:
+    <a href="https://keshtazar.ir" target="_blank">keshtazar.ir</a>
+</div>
+</body>
+</html>

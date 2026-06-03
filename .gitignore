@@ -1,0 +1,103 @@
+# =============================================================================
+#  Python & Django Specific
+# =============================================================================
+
+# Environment Folders (بسیار مهم: پوشه‌های محیط مجازی)
+# این‌ها حاوی پکیج‌های نصب شده هستند و نباید در گیت باشند.
+env/
+venv/
+.venv/
+ENV/
+VENV/
+.env/
+
+# Python cache files (فایل‌های موقت پایتون)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django Specific (مخصوص جنگو)
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+# Collected static files (فایلهای استاتیک جمع‌آوری شده توسط collectstatic)
+staticfiles/
+static_root/
+
+# Media files (فایل‌های آپلود شده توسط کاربران)
+media/
+
+# Secrets file (مهمترین فایل: حاوی کلیدهای امنیتی و پسوردها)
+.env
+.env.*
+secrets.py
+
+# Coverage reports (گزارش‌های تست کد)
+.coverage
+.coverage.*
+htmlcov/
+
+
+# =============================================================================
+#  Frontend & Build Tools (HTML, CSS, JS)
+# =============================================================================
+
+# Node.js dependencies folder (پکیج‌های جاوااسکریپت)
+node_modules/
+
+# Build output folders (پوشه‌های خروجی ابزارهای بیلد مثل Webpack, Vite)
+dist/
+build/
+public/build/
+
+# Log files from package managers (فایل‌های لاگ npm, yarn, pnpm)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =============================================================================
+#  IDE & Editor Configurations (تنظیمات ویرایشگرها)
+# =============================================================================
+
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+
+# PyCharm
+.idea/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Atom
+.atom/
+
+# =============================================================================
+#  Operating System Files (فایل‌های سیستمی)
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+
+# =============================================================================
+#  Other (سایر موارد)
+# =============================================================================
+
+# Compressed files (فایل‌های فشرده)
+*.zip
+*.rar
+*.7z

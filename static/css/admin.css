@@ -1,0 +1,21 @@
+/* تنظیمات RTL */
+* {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* استایل‌های سفارشی برای کارت‌ها */
+.card-header {
+    background: #f8f9fa !important;
+    border-bottom: 2px solid #dee2e6 !important;
+}
+
+/* استایل بدج‌های وضعیت */
+.badge-success { background: #28a745!important; }
+.badge-warning { background: #ffc107!important; }
+.badge-danger { background: #dc3545!important; }
+.badge-secondary { background: #6c757d!important; }
+
+/* استایل‌های جدول */
+table th { background: #e9ecef !important; }
+.table-striped tbody tr:nth-of-type(odd) { background-color: rgba(0,0,0,.03) !important; }
