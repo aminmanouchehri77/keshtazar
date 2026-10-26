@@ -215,7 +215,7 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         """ایجاد لینک برای دسترسی به صفحه جزئیات محصول"""
-        return reverse('product_detail', kwargs={'pk': self.pk, 'slug': self.slug})
+        return reverse('product_detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
         if not self.slug:

@@ -6,7 +6,12 @@ from .views import payment_process, payment_callback, OrderDetailView, update_sh
 
 urlpatterns = [
     path('shop/', views.store_products_list_view, name='product_list'),
-    path('product-detail/<int:pk>/<str:slug>/', views.products_details_view, name='product_detail'),
+    path('product-detail/<int:pk>/', views.products_details_view, name='product_detail'),
+    path(
+        'product-detail/<int:pk>/<str:slug>/',
+        views.legacy_product_detail_redirect,
+        name='product_detail_legacy',
+    ),
     path('faq/', views.faq_view, name='faq'),
     path('searched-products/', views.products_search_view, name='searched_product_list'),
     path('add-to-cart/', views.add_to_cart, name="add_to_cart"),

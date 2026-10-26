@@ -59,11 +59,8 @@ def store_products_list_view(request):
     })
 
 
-def products_details_view(request, pk, slug):
-    product = get_object_or_404(
-        Product.objects.filter(slug=slug),
-        pk=pk
-    )
+def products_details_view(request, pk):
+    product = get_object_or_404(Product, pk=pk)
     error_message = ''
     has_purchased = False
     average_rating = 0
@@ -108,7 +105,7 @@ def products_details_view(request, pk, slug):
                     request,
                     "✅ نظر شما با موفقیت ثبت شد و پس از بررسی نمایش داده خواهد شد"
                 )
-                return redirect('product_detail', pk=product.pk, slug=product.slug)
+                return redirect('product_detail', pk=product.pk)
             else:
                 error_message = "لطفا اطلاعات فرم را به درستی وارد کنید"
         comment_form = CommentForm(request.POST)
@@ -124,6 +121,11 @@ def products_details_view(request, pk, slug):
         'has_purchased': has_purchased,
     }
     return render(request, 'store/product_detail.html', context)
+
+
+def legacy_product_detail_redirect(request, pk, slug):
+    product = get_object_or_404(Product, pk=pk)
+    return redirect('product_detail', pk=product.pk, permanent=True)
 
 
 def faq_view(request):
