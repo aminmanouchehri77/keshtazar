@@ -1,16 +1,19 @@
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def my_callback(sender, **kwargs):
-    print("Request finished")
+    logger.debug('Request completed')
 
 
 def create_new_user(sender, instance, created, **kwargs):
     if created:
-        print("new user", instance)
+        logger.info('User account created')
 
 
 def update_user(sender, instance, created, **kwargs):
     if not created:
-        print("update user", instance)
+        logger.info('User account updated')
 
 

@@ -365,7 +365,7 @@ def payment_process(request, pk):
     if not res.get('success'):
         err = res.get('error', 'خطای نامشخص')
         messages.error(request, f'خطا در ارتباط با درگاه: {err}')
-        logger.error("SEP token error for order %s: %s", order.id, res)
+        logger.error("SEP token request failed for order %s", order.id)
         return redirect('checkout')
 
     # توکن از داخل get_token در order.sep_token ذخیره شده است
@@ -417,7 +417,7 @@ def payment_callback(request):
     try:
         vr = sep.verify_payment(ref_num)
     except Exception as e:
-        logger.error("SEP.verify exception for %s: %s", order.id, e)
+        logger.error("SEP verification failed for order %s", order.id)
         order.status = Order.ORDER_STATUS_CANCELED
         order.sep_payment_data = {
             'verify_exception': str(e),

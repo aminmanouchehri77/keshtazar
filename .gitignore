@@ -32,6 +32,7 @@ media/
 # Secrets file (مهمترین فایل: حاوی کلیدهای امنیتی و پسوردها)
 .env
 .env.*
+!.env.example
 secrets.py
 
 # Coverage reports (گزارش‌های تست کد)

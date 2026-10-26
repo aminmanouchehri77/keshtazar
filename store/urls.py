@@ -1,14 +1,12 @@
 
-from django.urls import path, include, register_converter
-from .converters import PersianSlugConverter
+from django.urls import path, include
 from . import views
 from .views import payment_process, payment_callback, OrderDetailView, update_shipping, apply_discount, \
     OrderHistoryView, TermsConditionView, order_invoice_pdf
 
-register_converter(PersianSlugConverter, 'pslug')
 urlpatterns = [
     path('shop/', views.store_products_list_view, name='product_list'),
-    path('product-detail/<int:pk>/<pslug:slug>/', views.products_details_view, name='product_detail'),
+    path('product-detail/<int:pk>/<str:slug>/', views.products_details_view, name='product_detail'),
     path('faq/', views.faq_view, name='faq'),
     path('searched-products/', views.products_search_view, name='searched_product_list'),
     path('add-to-cart/', views.add_to_cart, name="add_to_cart"),

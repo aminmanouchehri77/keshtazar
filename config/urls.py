@@ -55,10 +55,6 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += debug_toolbar_urls()
-else:
-    # در محیط تولید نیز فایل‌های مدیا را سرو کنید
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 admin.site.site_header = 'پنل مدیریتی فروشگاه کشت آذر'
 admin.site.site_title = 'فروشگاه کشت آذر پاسارگاد'
 admin.site.index_title = 'فروشگاه کشت آذر پاسارگاد'

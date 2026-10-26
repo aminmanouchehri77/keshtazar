@@ -26,7 +26,6 @@ def login_view(request):
                 otp = helper.get_random_otp()
                 helper.send_otp(mobile, otp)
                 # save otp
-                print(otp)
                 user.otp = otp
                 user.save()
                 request.session['user_mobile'] = user.mobile
@@ -40,7 +39,6 @@ def login_view(request):
                 otp = helper.get_random_otp()
                 helper.send_otp(mobile, otp)
                 # save otp
-                print(otp)
                 user.otp = otp
                 user.is_active = False
                 user.save()
@@ -85,13 +83,21 @@ def verify_otp_view(request):
 
 def resend_otp_view(request):
     mobile = request.session.get('user_mobile')
+    if not mobile:
+        return redirect('accounts:login')
+
+    try:
+        user = CustomUser.objects.get(mobile=mobile)
+    except CustomUser.DoesNotExist:
+        return redirect('accounts:login')
 
     if helper.check_otp_expiration(mobile):
         return redirect('accounts:verify')
-    otp = helper.get_random_otp()
-    print(otp)
 
-    # helper.send_otp(mobile, otp)
+    otp = helper.get_random_otp()
+    user.otp = otp
+    user.save()
+    helper.send_otp(mobile, otp)
     return redirect("accounts:verify")
 
 

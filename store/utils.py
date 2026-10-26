@@ -126,8 +126,6 @@ class SEPPayment:
                 "RedirectUrl": self.callback_url,
                 "CellNumber": cell,
             }
-            logger.info("SEP Token Payload: %s", payload)
-
             # ارسال POST JSON
             resp = requests.post(
                 self.token_url,
@@ -139,7 +137,7 @@ class SEPPayment:
                 }
             )
             data = resp.json() if resp.ok else {}
-            logger.info("SEP Token Response: %s", data)
+            logger.info("SEP token request completed for order %s with status %s", order.id, resp.status_code)
 
             # بررسی موفقیت
             if resp.ok and data.get("status") == 1:
@@ -148,7 +146,6 @@ class SEPPayment:
                 with transaction.atomic():
                     order.sep_token = token
                     order.save(update_fields=["sep_token"])
-                    print(token)
                 return {"success": True, "token": token, "data": data}
 
             # خطای منطقی
@@ -160,7 +157,7 @@ class SEPPayment:
             }
 
         except Exception as e:
-            logger.exception("Exception in SEPPayment.get_token")
+            logger.error("SEP token request failed")
             return {"success": False, "error": str(e)}
 
     def verify_payment(self, ref_num):
@@ -172,8 +169,6 @@ class SEPPayment:
             "Content-Type": "application/json",  # به جای form باید json باشد
             "Accept": "application/json"
         }
-        logger.info("SEP Verify -> URL: %s, payload: %s", self.verify_url, payload)
-
         try:
             resp = requests.post(
                 self.verify_url,
@@ -182,13 +177,10 @@ class SEPPayment:
                 timeout=self.timeout
             )
         except RequestException as e:
-            logger.error("Network error in verify: %s", e)
+            logger.error("SEP verification network request failed")
             return {"success": False, "error": f"Network error: {e}"}
 
-        logger.info("SEP Verify response | status=%s | content-type=%s | text[0:200]=%s",
-                    resp.status_code,
-                    resp.headers.get("Content-Type"),
-                    resp.text.strip()[:200])
+        logger.info("SEP verification response status %s", resp.status_code)
 
         ct = resp.headers.get("Content-Type", "")
         text = resp.text.strip()
@@ -206,9 +198,9 @@ class SEPPayment:
                     "error": data.get("Message") or data.get("ErrorDescription") or str(data),
                     "data": data
                 }
-            except Exception as e:
-                logger.error("JSON parse error: %s", e)
-                return {"success": False, "error": f"JSON parse error: {e}", "raw_resp": text}
+            except Exception:
+                logger.error("SEP verification response was not valid JSON")
+                return {"success": False, "error": "JSON parse error", "raw_resp": text}
 
         # در غیر این صورت:
         return {
@@ -255,14 +247,14 @@ def send_kavenegar(
         resp = requests.post(url, params=params, timeout=10)
         resp.raise_for_status()
         data = resp.json()
-        logger.info("Kavenegar SMS sent to %s, template=%s, resp=%s", mobile, template, data)
+        logger.info("Kavenegar SMS provider returned a response")
         return data
-    except requests.RequestException as e:
-        logger.error("Kavenegar HTTP error sending to %s: %s", mobile, e)
-    except ValueError as e:
-        logger.error("Invalid JSON from Kavenegar for %s: %s", mobile, e)
-    except Exception as e:
-        logger.exception("Unexpected error sending SMS to %s:", mobile)
+    except requests.RequestException:
+        logger.error("Kavenegar HTTP request failed")
+    except ValueError:
+        logger.error("Kavenegar returned invalid JSON")
+    except Exception:
+        logger.error("Unexpected error sending SMS")
     return {}
 
 

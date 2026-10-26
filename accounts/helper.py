@@ -1,9 +1,12 @@
 from kavenegar import *
 from config.settings import KAVENEGAR_API_KEY
+import logging
 import requests
 from random import randint
 from . import models
 import datetime
+
+logger = logging.getLogger(__name__)
 
 
 def send_otp(mobile, otp):
@@ -18,13 +21,15 @@ def send_otp(mobile, otp):
             'token': otp,
 
         }
-        response = requests.post(url, params=params)
-        print('OTP: ', otp)
-        print(response)
-    except APIException as e:
-        print(e)
-    except HTTPException as e:
-        print(e)
+        response = requests.post(url, params=params, timeout=10)
+        response.raise_for_status()
+        logger.info('OTP provider request completed with status %s', response.status_code)
+    except APIException:
+        logger.error('OTP provider API request failed')
+    except HTTPException:
+        logger.error('OTP provider HTTP request failed')
+    except requests.RequestException:
+        logger.error('OTP provider network request failed')
 
 
 def get_random_otp():
@@ -35,13 +40,10 @@ def check_otp_expiration(mobile):
     try:
         user = models.CustomUser.objects.get(mobile=mobile)
         now = datetime.datetime.now()
-        print(now)
         otp_time = user.otp_create_time
-        print(otp_time)
         diff_time = now - otp_time
-        print('OTP TIME: ', diff_time)
 
-        if diff_time.seconds > 60:
+        if diff_time.total_seconds() > 60:
             return False
 
         return True

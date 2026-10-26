@@ -9,37 +9,33 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import os
 from pathlib import Path
 from environs import Env
-
-import django.core.mail.backends.console
 from django.contrib.messages import constants as message_constants
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # for enviroments varibles
 env = Env()
-env.read_env()
+env.read_env(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = env.str('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DJANGO_DEBUG')
+DEBUG = env.bool('DJANGO_DEBUG', default=False)
+SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=not DEBUG)
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG,
 }
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '.liara.ir',           # اجازه به تمام زیردامنه‌های liara.ir
-    '.liara.run',          # اجازه به تمام زیردامنه‌های liara.run
-]
+ALLOWED_HOSTS = env.list(
+    'DJANGO_ALLOWED_HOSTS',
+    default=['keshtazar.ir', 'www.keshtazar.ir', 'localhost', '127.0.0.1'],
+)
 
 
 # Application definition
@@ -62,7 +58,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'rosetta',
-    "debug_toolbar",
     'ckeditor',
     'ckeditor_uploader',
     'django_jalali',
@@ -72,7 +67,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
 
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -81,6 +75,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+
+if not DEBUG:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 INTERNAL_IPS = [
 
     "127.0.0.1",
@@ -92,7 +93,6 @@ INTERNAL_IPS = [
 # EMAIL_USE_TLS = True
 # EMAIL_PORT = 587
 # EMAIL_HOST_USER = "keshtazarpasargad@gmail.com"
-# EMAIL_HOST_PASSWORD = "xahm jpcs zeqj yvsa"
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -128,31 +128,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-is_liara = os.environ.get('LIARA_URL', False)
-
-if is_liara:
-    # تنظیمات دیتابیس برای لیارا
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ.get('MYSQL_DATABASE'),
-            'USER': os.environ.get('MYSQL_USER'),
-            'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-            'HOST': os.environ.get('MYSQL_HOST'),
-            'PORT': os.environ.get('MYSQL_PORT', '3306'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': env.str('MYSQL_DATABASE', default='kesht_azar_pasargad_store'),
+        'USER': env.str('MYSQL_USER', default='root'),
+        'PASSWORD': env.str('MYSQL_PASSWORD'),
+        'HOST': env.str('MYSQL_HOST', default='localhost'),
+        'PORT': env.str('MYSQL_PORT', default='3306'),
     }
-else:
-    # تنظیمات دیتابیس برای محیط توسعه محلی
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'kesht_azar_pasargad_store',
-            'USER': 'root',
-            'PASSWORD': env('MYSQL_PASSWORD'),
-            'HOST': 'localhost',
-        }
-    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -192,9 +177,22 @@ USE_L10N = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (BASE_DIR / 'static',)
+PUBLIC_ROOT_VALUE = env.str('PUBLIC_ROOT', default='')
+PUBLIC_ROOT = Path(PUBLIC_ROOT_VALUE) if PUBLIC_ROOT_VALUE else BASE_DIR.parent / 'public_html'
+STATIC_ROOT = Path(env.str(
+    'STATIC_ROOT',
+    default=str(PUBLIC_ROOT / 'static' if PUBLIC_ROOT_VALUE else BASE_DIR / 'staticfiles'),
+))
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -202,15 +200,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-if DEBUG:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
-    CKEDITOR_UPLOAD_PATH = "uploads/ckeditor/"
-else:
-    # مسیر برای محیط تولید (لیارا)
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = '/usr/src/app/media/'
-    CKEDITOR_UPLOAD_PATH = "uploads/ckeditor/"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = Path(env.str(
+    'MEDIA_ROOT',
+    default=str(PUBLIC_ROOT / 'media' if PUBLIC_ROOT_VALUE else BASE_DIR / 'media'),
+))
+CKEDITOR_UPLOAD_PATH = "uploads/ckeditor/"
 
 CRISPY_ALLOWED_TEMPLATE_PAKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -229,11 +224,15 @@ CKEDITOR_CONFIGS = {
         ]),
     },
 }
-CSRF_COOKIE_SECURE = True  # فقط اگر سایت HTTPS است
-CSRF_TRUSTED_ORIGINS = [
-    'https://keshtazar.ir',
-    'https://sep.shaparak.ir'
-]
+CSRF_COOKIE_SECURE = not DEBUG
+CSRF_TRUSTED_ORIGINS = env.list(
+    'CSRF_TRUSTED_ORIGINS',
+    default=[
+        'https://keshtazar.ir',
+        'https://www.keshtazar.ir',
+        'https://sep.shaparak.ir',
+    ],
+)
 
 
 LOCALE_PATHS = ('templates/locale/',)
@@ -262,7 +261,8 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'verbose': {
+        'ascii': {
+            '()': 'config.logging_utils.ASCIIFormatter',
             'format': '{levelname} {asctime} {module} {message}',
             'style': '{',
         },
@@ -271,14 +271,14 @@ LOGGING = {
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+            'formatter': 'ascii',
         },
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
             'level': 'INFO',
-            'propagate': True,
+            'propagate': False,
         },
         'payment': {
             'handlers': ['console'],
@@ -286,15 +286,16 @@ LOGGING = {
             'propagate': False,
         },
     },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
 }
 # settings.py
 
 if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_PRELOAD = True
-else:
-    SECURE_SSL_REDIRECT = False
