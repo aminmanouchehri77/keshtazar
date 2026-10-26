@@ -29,6 +29,7 @@ def post_archive_view(request, pk):
     try:
         archive = BlogArchive.objects.get(pk=pk)
         blogs = BlogPost.objects.filter(archive=archive)
+        
         return render(request, 'blog/blog_archived.html',
                       {'archived_blogs': blogs, 'archive': archive})
 
