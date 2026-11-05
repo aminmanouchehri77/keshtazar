@@ -37,6 +37,7 @@ urlpatterns = [
     path('keshtazaradmin/', admin.site.urls),
     path('blog/', include('blog.urls')),
     path('store/', include('store.urls')),
+    path('support/', include('support.urls')),
     path('rosetta/', include('rosetta.urls')),
     path('', index_view, name='index'),
     path('accounts/', include('accounts.urls')),

@@ -47,6 +47,7 @@ Use the environment variable section in Setup Python App. Do not upload the loca
 - `MYSQL_HOST` and `MYSQL_PORT`: use the values supplied by the host. The default host is `localhost` and the default port is `3306`.
 - `API_KAVENEGAR`, `SEP_TERMINAL`, and `SEP_PASSWORD`: use the live production credentials.
 - `ZARINPAL_MERCHANT_ID` and `ZARINPAL_SANDBOX_MERCHANT_ID`: set the values required by the configured payment flow.
+- `SUPPORT_PHONE`: the support phone number shown in the site chat widget. `SUPPORT_RUBIKA_ENABLED`, `SUPPORT_RUBIKA_BOT_TOKEN`, `SUPPORT_RUBIKA_CHAT_ID`, `SUPPORT_RUBIKA_USER_ID`, `SUPPORT_RUBIKA_WEBHOOK_SECRET`, and `SUPPORT_PUBLIC_URL` configure the Rubika bridge. Follow `support/README.md` to obtain both support IDs, migrate the database, verify the private chat, and register the HTTPS webhook. Keep the bridge disabled until the webhook registration succeeds, then enable it and restart the application.
 - `STATIC_ROOT`: optional override. By default collected files go to `PUBLIC_ROOT/static`.
 - `MEDIA_ROOT`: optional override. By default uploads go to `PUBLIC_ROOT/media`.
 
@@ -90,6 +91,8 @@ python manage.py migrate --plan
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput
 ```
+
+For Rubika setup, initially set `SUPPORT_RUBIKA_ENABLED=False`, the bot token, webhook secret, and public HTTPS URL; leave the two support ID values blank. Restart the app and run `python manage.py discover_support_rubika_chat`, then save its chat and user IDs in the cPanel environment settings and restart the app again. After the database migration, run `python manage.py configure_support_rubika_webhook`. When it reports success, set `SUPPORT_RUBIKA_ENABLED=True` and restart the app once more. The full sequence is in `support/README.md`.
 
 WhiteNoise serves collected files under `/static/`; `collectstatic` writes them into `PUBLIC_ROOT/static`. Uploaded files are stored in `PUBLIC_ROOT/media`. Keep the media directory writable by the application user. A domain attached to Setup Python App may proxy requests to the Python app instead of serving files from its document root. Test `/media/` through the temporary hostname before cutover; if the app proxy intercepts it, ask the host for its supported way to serve that path. Do not expose the application root or virtual environment under `public_html`.
 

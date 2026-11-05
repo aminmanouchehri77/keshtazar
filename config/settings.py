@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'accounts',
     'blog',
     'store',
+    'support',
     # third party
     'crispy_forms',
     'crispy_bootstrap5',
@@ -111,6 +112,7 @@ TEMPLATES = [
                 'blog.context_processors.archive_posts',
                 'store.context_processors.cart_context',
                 'store.context_processors.product_ratings',
+                'support.context_processors.support_widget_settings',
             ],
         },
     },
@@ -256,6 +258,15 @@ SEP_MERCHANT_URL = 'https://keshtazar.ir'  # آدرس سایت شما
 SEP_TOKEN_URL = 'https://sep.shaparak.ir/onlinepg/onlinepg'
 SEP_VERIFY_URL = 'https://sep.shaparak.ir/verifyTxnRandomSessionkey/ipg/verify/'
 SEP_PAYMENT_URL = 'https://sep.shaparak.ir/OnlinePG/OnlinePG'
+
+# Website support widget and Rubika Bot API integration.
+SUPPORT_PHONE = env.str('SUPPORT_PHONE', default='09138825163')
+SUPPORT_RUBIKA_ENABLED = env.bool('SUPPORT_RUBIKA_ENABLED', default=False)
+SUPPORT_RUBIKA_BOT_TOKEN = env.str('SUPPORT_RUBIKA_BOT_TOKEN', default='')
+SUPPORT_RUBIKA_CHAT_ID = env.str('SUPPORT_RUBIKA_CHAT_ID', default='')
+SUPPORT_RUBIKA_USER_ID = env.str('SUPPORT_RUBIKA_USER_ID', default='')
+SUPPORT_RUBIKA_WEBHOOK_SECRET = env.str('SUPPORT_RUBIKA_WEBHOOK_SECRET', default='')
+SUPPORT_PUBLIC_URL = env.str('SUPPORT_PUBLIC_URL', default='https://keshtazar.ir').rstrip('/')
 
 LOGGING = {
     'version': 1,

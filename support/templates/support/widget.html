@@ -1,0 +1,68 @@
+{% load static %}
+<div class="support-chat" id="keshtSupportChat"
+     data-session-url="{% url 'support:session' %}"
+     data-messages-url="{% url 'support:messages' %}">
+    <section class="support-chat__panel" id="supportChatPanel" role="dialog" aria-modal="false"
+             aria-labelledby="supportChatTitle" hidden>
+        <header class="support-chat__header">
+            <div class="support-chat__brand-mark" aria-hidden="true">
+                <i class="fas fa-headset"></i>
+                <span class="support-chat__brand-spark">✦</span>
+            </div>
+            <div class="support-chat__heading">
+                <h2 id="supportChatTitle">پشتیبانی کشت‌آذر</h2>
+                <p><span class="support-chat__status-dot"></span><span id="supportChatStatus">گفتگوی پشتیبانی</span></p>
+            </div>
+            <button class="support-chat__close" id="supportChatClose" type="button" aria-label="بستن گفتگو">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+        </header>
+
+        <div class="support-chat__conversation-meta">
+            <span><i class="fas fa-lock" aria-hidden="true"></i> گفتگوی خصوصی</span>
+            <span id="supportChatCode" class="support-chat__code" hidden></span>
+        </div>
+
+        <div class="support-chat__body" id="supportChatBody">
+            <div class="support-chat__welcome" id="supportChatWelcome">
+                <div class="support-chat__welcome-icon" aria-hidden="true"><i class="fas fa-comments"></i></div>
+                <span class="support-chat__eyebrow">همراه شما در کشت‌آذر</span>
+                <h3>چطور می‌توانیم راهنمایی‌تان کنیم؟</h3>
+                <p>پیامتان را بنویسید تا تیم پشتیبانی در اولین فرصت پاسخ دهد.</p>
+                <div class="support-chat__prompts" aria-label="موضوع‌های پیشنهادی">
+                    <button type="button" data-prompt="برای انتخاب محصول مناسب راهنمایی می‌خواهم">راهنمای خرید</button>
+                    <button type="button" data-prompt="می‌خواهم وضعیت سفارش خود را پیگیری کنم">پیگیری سفارش</button>
+                    <button type="button" data-prompt="برای کشت و مصرف محصول مشاوره می‌خواهم">مشاوره کشت</button>
+                </div>
+            </div>
+            <ol class="support-chat__messages" id="supportChatMessages" aria-label="پیام‌های گفتگو"></ol>
+            <div class="support-chat__notice" id="supportChatNotice" role="status" hidden>
+                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                <span>اتصال گفتگوی آنلاین هنوز فعال نشده است. فعلاً می‌توانید تلفنی با پشتیبانی تماس بگیرید.</span>
+            </div>
+            <div class="support-chat__error" id="supportChatError" role="alert" hidden></div>
+        </div>
+
+        <form class="support-chat__composer" id="supportChatForm">
+            {% csrf_token %}
+            <label class="support-chat__sr-only" for="supportChatInput">متن پیام شما</label>
+            <textarea id="supportChatInput" name="body" rows="1" maxlength="3000"
+                      placeholder="پیامتان را بنویسید…" disabled></textarea>
+            <button class="support-chat__send" id="supportChatSend" type="submit" aria-label="ارسال پیام" disabled>
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+            </button>
+            <div class="support-chat__composer-foot">
+                <a href="tel:{{ support_phone }}"><i class="fas fa-phone-alt" aria-hidden="true"></i> تماس با پشتیبانی: <bdi dir="ltr">{{ support_phone }}</bdi></a>
+                <span id="supportChatCount">۰ / ۳۰۰۰</span>
+            </div>
+        </form>
+    </section>
+
+    <button class="support-chat__launcher" id="supportChatLauncher" type="button"
+            aria-label="گفتگو با پشتیبانی" aria-expanded="false" aria-controls="supportChatPanel">
+        <span class="support-chat__launcher-icon" aria-hidden="true"><i class="fas fa-headset"></i></span>
+        <span class="support-chat__launcher-ping" aria-hidden="true"></span>
+    </button>
+</div>
+<link rel="stylesheet" href="{% static 'support/css/widget.css' %}?v=2">
+<script src="{% static 'support/js/widget.js' %}" defer></script>
