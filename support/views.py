@@ -2,14 +2,15 @@ import hashlib
 import json
 import logging
 import secrets
+import sys
 from datetime import timedelta
 
 from django.conf import settings
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_GET, require_http_methods, require_POST
+from django.views.decorators.http import require_GET, require_http_methods
 
 from .models import SupportConversation, SupportMessage
 from .rubika import (
@@ -19,6 +20,7 @@ from .rubika import (
     send_visitor_message,
     summarize_support_reply_updates,
 )
+from .realtime import publish_support_message
 
 
 logger = logging.getLogger(__name__)
@@ -33,6 +35,30 @@ SAFE_DELIVERY_ERROR_CODES = frozenset({
     'api_rejected_request',
     'missing_message_id',
 })
+
+
+def _write_support_webhook_diagnostic(event, **fields):
+    """Write privacy-safe webhook diagnostics to Passenger stderr."""
+    parts = [f'time={timezone.now().isoformat(timespec="seconds")}', f'event={event}']
+    for key, value in fields.items():
+        if not isinstance(key, str) or not key.isascii() or not key.replace('_', '').isalnum():
+            continue
+        if isinstance(value, bool):
+            safe_value = 'true' if value else 'false'
+        elif isinstance(value, int):
+            safe_value = str(value)
+        elif isinstance(value, str) and value.isascii() and value.replace('_', '').replace('-', '').isalnum():
+            safe_value = value
+        else:
+            safe_value = 'unknown'
+        parts.append(f'{key}={safe_value}')
+
+    try:
+        sys.stderr.write('Rubika support webhook ' + ' '.join(parts) + '\n')
+        sys.stderr.flush()
+    except Exception:
+        # Logging must never prevent Rubika from receiving an HTTP response.
+        pass
 
 
 def _conversation_for_request(request):
@@ -82,9 +108,16 @@ def chat_session(request):
         'conversation': conversation.public_code,
         'authenticated': bool(conversation.user_id),
         'support_connected': rubika_configuration_ready(),
+        'websocket_enabled': bool(getattr(settings, 'SUPPORT_WEBSOCKET_REDIS_URL', '')),
         'phone': settings.SUPPORT_PHONE,
         'messages': [_serialize(message) for message in reversed(list(messages))],
     })
+
+
+@require_GET
+def websocket_http_fallback(request):
+    """A WebSocket handshake must be served by the ASGI application."""
+    return HttpResponse(status=426)
 
 
 @never_cache
@@ -133,40 +166,79 @@ def chat_messages(request):
     )
     send_visitor_message(message)
     message.refresh_from_db(fields=('delivery_status', 'delivery_attempts', 'delivery_error', 'rubika_message_id'))
+    publish_support_message(message)
     return JsonResponse({'message': _serialize(message)}, status=201)
 
 
 @csrf_exempt
 @never_cache
-@require_POST
 def rubika_webhook(request, secret):
+    request_id = secrets.token_hex(4)
+    _write_support_webhook_diagnostic('received', request_id=request_id, method=request.method)
+    if request.method not in ('POST', 'HEAD'):
+        _write_support_webhook_diagnostic('rejected', request_id=request_id, reason='method_not_allowed')
+        return JsonResponse({'ok': False}, status=405)
+
+    if not settings.SUPPORT_RUBIKA_ENABLED:
+        _write_support_webhook_diagnostic('rejected', request_id=request_id, reason='support_disabled')
+        raise Http404
+    if not settings.SUPPORT_RUBIKA_BOT_TOKEN:
+        _write_support_webhook_diagnostic('rejected', request_id=request_id, reason='bot_token_missing')
+        raise Http404
+    if not settings.SUPPORT_RUBIKA_CHAT_ID or not settings.SUPPORT_RUBIKA_USER_ID:
+        _write_support_webhook_diagnostic('rejected', request_id=request_id, reason='support_ids_missing')
+        raise Http404
+
     expected_secret = settings.SUPPORT_RUBIKA_WEBHOOK_SECRET
-    if not rubika_configuration_ready() or not expected_secret:
+    if not expected_secret:
+        _write_support_webhook_diagnostic('rejected', request_id=request_id, reason='secret_not_configured')
         raise Http404
     if not secrets.compare_digest(str(secret), str(expected_secret)):
+        _write_support_webhook_diagnostic('rejected', request_id=request_id, reason='secret_mismatch')
         raise Http404
+    if not rubika_configuration_ready():
+        _write_support_webhook_diagnostic('rejected', request_id=request_id, reason='configuration_not_ready')
+        raise Http404
+    if request.method == 'HEAD':
+        _write_support_webhook_diagnostic('health_check', request_id=request_id)
+        return HttpResponse(status=200)
     if len(request.body) > 65_536:
+        _write_support_webhook_diagnostic('rejected', request_id=request_id, reason='payload_too_large')
         return JsonResponse({'ok': False}, status=413)
     try:
         payload = json.loads(request.body.decode('utf-8'))
     except (UnicodeDecodeError, json.JSONDecodeError):
+        _write_support_webhook_diagnostic('rejected', request_id=request_id, reason='invalid_json')
         return JsonResponse({'ok': False}, status=400)
 
     try:
         diagnostics = summarize_support_reply_updates(payload)
         processed = process_rubika_update_payload(payload)
     except RubikaAPIError:
+        _write_support_webhook_diagnostic(
+            'processing_error', request_id=request_id, error_type='RubikaAPIError'
+        )
         logger.warning('Rubika support webhook could not process the update.')
         return JsonResponse({'ok': False}, status=502)
     except Exception as exc:
+        _write_support_webhook_diagnostic(
+            'processing_error', request_id=request_id, error_type=type(exc).__name__
+        )
         logger.error('Rubika support webhook failed (%s).', type(exc).__name__)
         raise
 
-    logger.info(
-        'Rubika support webhook processed updates=%s replies=%s private_matches=%s sender_matches=%s',
-        diagnostics['updates'],
-        processed,
-        diagnostics['private_chat_matches'],
-        diagnostics['support_sender_matches'],
+    _write_support_webhook_diagnostic(
+        'processed',
+        request_id=request_id,
+        updates=diagnostics['updates'],
+        new_messages=diagnostics['new_messages'],
+        payloads=diagnostics['message_payloads'],
+        replies=processed,
+        private_matches=diagnostics['private_chat_matches'],
+        sender_matches=diagnostics['support_sender_matches'],
+        reply_references=diagnostics['reply_references'],
+        notification_matches=diagnostics['notification_matches'],
+        message_ids=diagnostics['message_ids'],
+        text_messages=diagnostics['text_messages'],
     )
     return JsonResponse({'ok': True, 'processed': processed})

@@ -1,0 +1,2 @@
+channels[daphne]==4.2.2
+channels-redis==4.2.1

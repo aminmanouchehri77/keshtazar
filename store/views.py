@@ -604,7 +604,8 @@ def order_invoice_pdf(request, order_id):
     # base_url برای resolve کردن URL های استاتیک لازم است
     pdf_file = HTML(
         string=html_string,
-        base_url=request.build_absolute_uri('/')  # ریشهٔ پروژه
+        # فونت را مستقیم از فایل‌های پروژه بخوان؛ به دسترسی HTTP سرور به static وابسته نباشد.
+        base_url=(settings.BASE_DIR / 'static').resolve().as_uri() + '/'
     ).write_pdf()
 
     # بازگشت پاسخ PDF

@@ -2,10 +2,12 @@ from datetime import timedelta
 
 import requests
 from django.conf import settings
+from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
 
 from .models import SupportConversation, SupportMessage
+from .realtime import publish_support_message
 from .rubika_read import extract_updates
 
 
@@ -80,7 +82,8 @@ def _message_payload(update):
 def _reply_target_id(message):
     reply_to = message.get('reply_to_message_id')
     if not reply_to and isinstance(message.get('reply_to_message'), dict):
-        reply_to = message['reply_to_message'].get('message_id')
+        reply = message['reply_to_message']
+        reply_to = reply.get('message_id') or reply.get('reply_to_message_id')
     return str(reply_to or '')
 
 
@@ -89,8 +92,13 @@ def summarize_support_reply_updates(payload):
     counts = {
         'updates': 0,
         'new_messages': 0,
+        'message_payloads': 0,
         'private_chat_matches': 0,
         'support_sender_matches': 0,
+        'reply_references': 0,
+        'notification_matches': 0,
+        'message_ids': 0,
+        'text_messages': 0,
     }
     expected_chat = str(settings.SUPPORT_RUBIKA_CHAT_ID)
     expected_sender = str(settings.SUPPORT_RUBIKA_USER_ID)
@@ -103,12 +111,25 @@ def summarize_support_reply_updates(payload):
         message = _message_payload(update)
         if not message:
             continue
+        counts['message_payloads'] += 1
         chat_id = str(update.get('chat_id') or message.get('chat_id') or '')
         sender_id = str(message.get('sender_id') or '')
         if chat_id == expected_chat:
             counts['private_chat_matches'] += 1
         if sender_id == expected_sender and str(message.get('sender_type') or '').lower() == 'user':
             counts['support_sender_matches'] += 1
+        reply_to_id = _reply_target_id(message)
+        if reply_to_id:
+            counts['reply_references'] += 1
+            if SupportMessage.objects.filter(
+                rubika_message_id=reply_to_id,
+                sender=SupportMessage.VISITOR,
+            ).exists():
+                counts['notification_matches'] += 1
+        if message.get('message_id'):
+            counts['message_ids'] += 1
+        if str(message.get('text') or '').strip():
+            counts['text_messages'] += 1
     return counts
 
 
@@ -154,6 +175,8 @@ def process_support_reply_update(update):
             status=SupportConversation.OPEN,
             updated_at=timezone.now(),
         )
+        support_message = SupportMessage.objects.get(rubika_inbound_message_id=inbound_id)
+        transaction.on_commit(lambda: publish_support_message(support_message))
     return created
 
 

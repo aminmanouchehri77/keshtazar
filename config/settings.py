@@ -126,6 +126,19 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
+
+# WebSocket delivery is enabled only when a shared Redis channel layer is configured.
+# The standard cPanel Passenger WSGI application continues to use HTTP polling.
+SUPPORT_WEBSOCKET_REDIS_URL = env.str('SUPPORT_WEBSOCKET_REDIS_URL', default='').strip()
+if SUPPORT_WEBSOCKET_REDIS_URL:
+    INSTALLED_APPS.append('channels')
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {'hosts': [SUPPORT_WEBSOCKET_REDIS_URL]},
+        },
+    }
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -294,6 +307,11 @@ LOGGING = {
         'payment': {
             'handlers': ['console'],
             'level': 'ERROR',
+            'propagate': False,
+        },
+        'support': {
+            'handlers': ['console'],
+            'level': 'INFO',
             'propagate': False,
         },
     },

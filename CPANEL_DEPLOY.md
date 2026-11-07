@@ -48,6 +48,7 @@ Use the environment variable section in Setup Python App. Do not upload the loca
 - `API_KAVENEGAR`, `SEP_TERMINAL`, and `SEP_PASSWORD`: use the live production credentials.
 - `ZARINPAL_MERCHANT_ID` and `ZARINPAL_SANDBOX_MERCHANT_ID`: set the values required by the configured payment flow.
 - `SUPPORT_PHONE`: the support phone number shown in the site chat widget. `SUPPORT_RUBIKA_ENABLED`, `SUPPORT_RUBIKA_BOT_TOKEN`, `SUPPORT_RUBIKA_CHAT_ID`, `SUPPORT_RUBIKA_USER_ID`, `SUPPORT_RUBIKA_WEBHOOK_SECRET`, and `SUPPORT_PUBLIC_URL` configure the Rubika bridge. Follow `support/README.md` to obtain both support IDs, migrate the database, verify the private chat, and register the HTTPS webhook. Keep the bridge disabled until the webhook registration succeeds, then enable it and restart the application.
+- `SUPPORT_WEBSOCKET_REDIS_URL`: optional Redis URL for live browser updates. The current cPanel entry point is `passenger_wsgi.py`, so its WSGI app cannot serve the project's ASGI WebSocket route. Leave this empty on the current cPanel setup; the widget keeps receiving replies through its HTTP polling fallback. WebSocket delivery requires an ASGI hosting process, WebSocket proxy support, and reachable Redis shared with the Django HTTP app.
 - `STATIC_ROOT`: optional override. By default collected files go to `PUBLIC_ROOT/static`.
 - `MEDIA_ROOT`: optional override. By default uploads go to `PUBLIC_ROOT/media`.
 
@@ -82,6 +83,8 @@ The preparation script creates a new output file and never edits the source dump
 If the destination server is older than the dump format or rejects the collation, stop and ask the host for a compatible MySQL export/import path. Do not change the collation or charset without testing a restored copy first.
 
 ## Prepare static files and media
+
+The default cPanel Passenger entry point in this project is WSGI. For a separate host that supports WebSockets, install `requirements-realtime.txt`, run `config.asgi:application` with an ASGI server, configure the reverse proxy to pass WebSocket upgrades, and set `SUPPORT_WEBSOCKET_REDIS_URL` to a Redis instance shared with the Django app. Do not set the Redis variable on the current cPanel app unless its provider supplies that ASGI and proxy setup; the chat widget automatically uses HTTP polling otherwise.
 
 Run these commands after the application variables and database are set:
 

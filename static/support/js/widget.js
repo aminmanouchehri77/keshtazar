@@ -27,6 +27,43 @@
     let loading = false;
     let sending = false;
     let pollTimer = null;
+    let reconnectTimer = null;
+    let socket = null;
+    let websocketEnabled = false;
+    const DEBUG_STORAGE_KEY = "keshtSupportChatDebug";
+    let debugEnabled = false;
+
+    try {
+        debugEnabled = new URLSearchParams(window.location.search).get("support_chat_debug") === "1"
+            || window.localStorage.getItem(DEBUG_STORAGE_KEY) === "1";
+    } catch (error) {}
+
+    function debugLog(eventName, details) {
+        if (!debugEnabled || !window.console || typeof window.console.info !== "function") return;
+        window.console.info("[KeshtSupportChat]", Object.assign({
+            event: eventName,
+            timestamp: new Date().toISOString()
+        }, details || {}));
+    }
+
+    function errorDetails(error) {
+        return {
+            http_status: Number.isFinite(error && error.status) ? error.status : null,
+            error_type: error && error.name ? String(error.name) : "Error"
+        };
+    }
+
+    window.keshtSupportChatDebug = function (enabled) {
+        debugEnabled = enabled !== false;
+        try {
+            if (debugEnabled) window.localStorage.setItem(DEBUG_STORAGE_KEY, "1");
+            else window.localStorage.removeItem(DEBUG_STORAGE_KEY);
+        } catch (error) {}
+        window.console.info("[KeshtSupportChat] Debug logging " + (debugEnabled ? "enabled" : "disabled")
+            + ". Message content and identifiers are omitted.");
+    };
+
+    if (debugEnabled) debugLog("debug_enabled", { source: "query_or_local_storage" });
 
     function toPersianDigits(value) {
         return String(value).replace(/\d/g, function (digit) {
@@ -59,11 +96,11 @@
         input.style.height = Math.min(input.scrollHeight, 112) + "px";
     }
 
-    function updateMessage(message) {
+    function updateMessage(message, advanceCursor) {
         if (!message || message.id === undefined || message.id === null) return;
         const id = String(message.id);
         const numericId = Number(message.id);
-        if (Number.isSafeInteger(numericId)) lastMessageId = Math.max(lastMessageId, numericId);
+        if (advanceCursor && Number.isSafeInteger(numericId)) lastMessageId = Math.max(lastMessageId, numericId);
 
         let item = knownMessages.get(id);
         if (!item) {
@@ -87,7 +124,11 @@
             meta.appendChild(delivery);
             item.append(bubble, meta);
             item._deliveryLabel = delivery;
-            messageList.appendChild(item);
+            item._messageId = numericId;
+            const nextItem = Array.from(messageList.children).find(function (child) {
+                return Number.isSafeInteger(numericId) && child._messageId > numericId;
+            });
+            messageList.insertBefore(item, nextItem || null);
             knownMessages.set(id, item);
         }
 
@@ -133,23 +174,36 @@
                 headers: { "Accept": "application/json" }
             });
             const result = await readJson(response);
-            if (!response.ok) throw new Error(result.error || "گفتگو بارگذاری نشد. دوباره تلاش کنید.");
+            if (!response.ok) {
+                const error = new Error(result.error || "گفتگو بارگذاری نشد. دوباره تلاش کنید.");
+                error.status = response.status;
+                throw error;
+            }
 
             connected = Boolean(result.support_connected);
+            websocketEnabled = Boolean(result.websocket_enabled);
             initialized = true;
+            debugLog("session_result", {
+                http_status: response.status,
+                support_connected: connected,
+                websocket_enabled: websocketEnabled,
+                initial_message_count: Array.isArray(result.messages) ? result.messages.length : 0
+            });
             statusLabel.textContent = connected ? "گفتگوی آنلاین" : "تماس با پشتیبانی";
             notice.hidden = connected;
             if (result.conversation) {
                 codeLabel.textContent = "کد گفتگو: " + result.conversation;
                 codeLabel.hidden = false;
             }
-            (result.messages || []).forEach(updateMessage);
+            (result.messages || []).forEach(function (message) { updateMessage(message, true); });
             errorBox.hidden = true;
             updateComposer();
         } catch (error) {
             connected = false;
+            websocketEnabled = false;
             statusLabel.textContent = "اتصال برقرار نشد";
             notice.hidden = false;
+            debugLog("session_failed", errorDetails(error));
             showError(error.message);
             updateComposer();
         } finally {
@@ -172,21 +226,98 @@
                 headers: { "Accept": "application/json" }
             });
             const result = await readJson(response);
-            if (!response.ok) throw new Error(result.error || "دریافت پیام‌های تازه انجام نشد.");
-            (result.messages || []).forEach(updateMessage);
+            if (!response.ok) {
+                const error = new Error(result.error || "دریافت پیام‌های تازه انجام نشد.");
+                error.status = response.status;
+                throw error;
+            }
+            const messages = Array.isArray(result.messages) ? result.messages : [];
+            debugLog("poll_result", {
+                http_status: response.status,
+                received: messages.length,
+                support_replies: messages.filter(function (message) { return message.sender === "support"; }).length,
+                visitor_messages: messages.filter(function (message) { return message.sender === "visitor"; }).length
+            });
+            messages.forEach(function (message) { updateMessage(message, true); });
             errorBox.hidden = true;
         } catch (error) {
+            debugLog("poll_failed", errorDetails(error));
             showError(error.message);
         } finally {
             loading = false;
         }
     }
 
+    function stopPolling() {
+        if (pollTimer) {
+            window.clearInterval(pollTimer);
+            pollTimer = null;
+        }
+    }
+
     function startPolling() {
-        if (pollTimer) window.clearInterval(pollTimer);
+        if (pollTimer) return;
         pollTimer = window.setInterval(function () {
             if (!panel.hidden && document.visibilityState === "visible") refreshMessages();
         }, 4500);
+    }
+
+    function scheduleReconnect() {
+        window.clearTimeout(reconnectTimer);
+        reconnectTimer = window.setTimeout(function () {
+            if (!panel.hidden && connected && websocketEnabled) connectWebSocket();
+        }, 5000);
+    }
+
+    function connectWebSocket() {
+        if (!window.WebSocket || !websocketEnabled || panel.hidden || !connected) {
+            startPolling();
+            return;
+        }
+        if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) return;
+
+        const url = new URL(root.dataset.websocketUrl, window.location.href);
+        url.protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        url.searchParams.set("after", String(lastMessageId));
+        debugLog("websocket_connecting", { secure: url.protocol === "wss:" });
+        const activeSocket = new WebSocket(url.toString());
+        socket = activeSocket;
+
+        activeSocket.addEventListener("open", function () {
+            if (socket !== activeSocket) return;
+            debugLog("websocket_open", {});
+            window.clearTimeout(reconnectTimer);
+            startPolling();
+            refreshMessages();
+        });
+        activeSocket.addEventListener("message", function (event) {
+            try {
+                const payload = JSON.parse(event.data);
+                if (payload.type === "message") {
+                    debugLog("websocket_message", {
+                        sender: payload.message && payload.message.sender === "support" ? "support" : "visitor"
+                    });
+                    updateMessage(payload.message);
+                    refreshMessages();
+                }
+            } catch (error) {
+                debugLog("websocket_message_invalid", { error_type: error.name || "Error" });
+                showError("پیام دریافتی از سرور خوانا نبود.");
+            }
+        });
+        activeSocket.addEventListener("close", function (event) {
+            if (socket !== activeSocket) return;
+            debugLog("websocket_closed", { close_code: event.code });
+            socket = null;
+            if (!panel.hidden) {
+                startPolling();
+                scheduleReconnect();
+            }
+        });
+        activeSocket.addEventListener("error", function () {
+            debugLog("websocket_error", {});
+            activeSocket.close();
+        });
     }
 
     function openPanel() {
@@ -194,19 +325,27 @@
         launcher.hidden = true;
         launcher.setAttribute("aria-expanded", "true");
         loadSession().then(function () {
-            if (connected) input.focus();
-            else closeButton.focus();
+            if (connected) {
+                input.focus();
+                if (websocketEnabled) connectWebSocket();
+                else startPolling();
+            } else {
+                closeButton.focus();
+            }
         });
-        startPolling();
     }
 
     function closePanel() {
         panel.hidden = true;
         launcher.hidden = false;
         launcher.setAttribute("aria-expanded", "false");
-        if (pollTimer) {
-            window.clearInterval(pollTimer);
-            pollTimer = null;
+        stopPolling();
+        window.clearTimeout(reconnectTimer);
+        reconnectTimer = null;
+        if (socket) {
+            const activeSocket = socket;
+            socket = null;
+            activeSocket.close();
         }
         launcher.focus();
     }
@@ -253,11 +392,20 @@
                 body: JSON.stringify({ body: text })
             });
             const result = await readJson(response);
-            if (!response.ok) throw new Error(result.error || "ارسال پیام انجام نشد. دوباره تلاش کنید.");
+            if (!response.ok) {
+                const error = new Error(result.error || "ارسال پیام انجام نشد. دوباره تلاش کنید.");
+                error.status = response.status;
+                throw error;
+            }
+            debugLog("send_result", {
+                http_status: response.status,
+                delivery_status: result.message && result.message.delivery_status
+            });
             updateMessage(result.message);
             input.value = "";
             errorBox.hidden = true;
         } catch (error) {
+            debugLog("send_failed", errorDetails(error));
             showError(error.message);
         } finally {
             sending = false;

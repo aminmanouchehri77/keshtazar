@@ -1,20 +1,27 @@
-{% load static %}{% load humanize %}{% load math_extras %}{% load shipping_extras %}
+{% load humanize %}{% load math_extras %}{% load shipping_extras %}
 <!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
     <title>فاکتور سفارش #{{ order.id }}</title>
     <style>
-        /* ثبت فونت فارسی */
+        /* ثبت فونت فارسی از فایل موجود در پروژه */
         @font-face {
-            font-family: 'Vazir';
-            src: url("{% static 'fonts/Vazir.ttf' %}") format('truetype');
-            font-weight: normal;
+            font-family: 'Vazirmatn';
+            src: url("fonts/webfonts/Vazirmatn-RD-FD-Regular.woff2") format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url("fonts/webfonts/Vazirmatn-RD-FD-Bold.woff2") format('woff2');
+            font-weight: 700;
             font-style: normal;
         }
 
         body {
-            font-family: 'Vazir', sans-serif;
+            font-family: 'Vazirmatn', sans-serif;
             direction: rtl;
         }
 

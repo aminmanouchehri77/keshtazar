@@ -1,7 +1,8 @@
 {% load static %}
 <div class="support-chat" id="keshtSupportChat"
      data-session-url="{% url 'support:session' %}"
-     data-messages-url="{% url 'support:messages' %}">
+     data-messages-url="{% url 'support:messages' %}"
+     data-websocket-url="{% url 'support:websocket' %}">
     <section class="support-chat__panel" id="supportChatPanel" role="dialog" aria-modal="false"
              aria-labelledby="supportChatTitle" hidden>
         <header class="support-chat__header">
@@ -65,4 +66,4 @@
     </button>
 </div>
 <link rel="stylesheet" href="{% static 'support/css/widget.css' %}?v=2">
-<script src="{% static 'support/js/widget.js' %}" defer></script>
+<script src="{% static 'support/js/widget.js' %}?v=4" defer></script>
